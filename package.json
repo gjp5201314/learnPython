@@ -8,8 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "check": "tsc -b --noEmit",
-    "deploy:gitee": "powershell -ExecutionPolicy Bypass -File ./deploy-gitee-pages.ps1"
+    "check": "tsc -b --noEmit"
   },
   "dependencies": {
     "clsx": "^2.1.1",
