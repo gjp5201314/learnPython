@@ -135,8 +135,25 @@ export default function CodeRunner({ code: initialCode, lessonId, className, min
         <pre
           ref={highlightRef}
           aria-hidden
-          className="code-block absolute inset-0 m-0 !bg-transparent pointer-events-none whitespace-pre overflow-auto"
-          style={{ minHeight, padding: "16px 18px 16px 48px" }}
+          className="m-0 pointer-events-none whitespace-pre overflow-auto"
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            minHeight,
+            padding: "16px 18px 16px 48px",
+            margin: 0,
+            background: "transparent",
+            border: 0,
+            borderRadius: 0,
+            fontFamily: '"JetBrains Mono", ui-monospace, monospace',
+            fontSize: "13.5px",
+            lineHeight: 1.7,
+            color: "#e4e4e7",
+            whiteSpace: "pre",
+          }}
           dangerouslySetInnerHTML={{ __html: highlightPython(code) + "\n" }}
         />
         <textarea
@@ -145,7 +162,7 @@ export default function CodeRunner({ code: initialCode, lessonId, className, min
           onChange={(e) => setCode(e.target.value)}
           onScroll={syncScroll}
           spellCheck={false}
-          className="relative block w-full bg-transparent text-transparent caret-vine-300 font-mono text-[13.5px] leading-[1.7] outline-none resize-none p-4 pl-12 selection:bg-vine-300/30"
+          className="relative z-10 block w-full bg-transparent text-transparent caret-vine-300 font-mono text-[13.5px] leading-[1.7] outline-none resize-none p-4 pl-12 selection:bg-vine-300/30"
           style={{ minHeight, height: "auto" }}
         />
       </div>
