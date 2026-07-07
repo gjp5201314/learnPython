@@ -1,0 +1,179 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica,
+    Arial, sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  min-height: 100vh;
+}
+
+body {
+  background-color: #0b0d12;
+  color: #e4e4e7;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* 全局细噪点叠加 */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.04 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  mix-blend-mode: overlay;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+::selection {
+  background: rgba(126, 231, 135, 0.25);
+  color: #ffffff;
+}
+
+/* 滚动条 */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #22262f;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2a2f3a;
+}
+
+/* 文本渐变 */
+.text-gradient-vine {
+  background: linear-gradient(120deg, #7ee787 0%, #5bd45d 40%, #ffd27a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.text-gradient-ember {
+  background: linear-gradient(120deg, #ffd27a 0%, #ffb454 60%, #f39c32 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* 卡片 hover 边光 */
+.card-glow {
+  position: relative;
+  isolation: isolate;
+}
+.card-glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(120deg, transparent, rgba(126, 231, 135, 0.4), transparent);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.card-glow:hover::after {
+  opacity: 1;
+}
+
+/* 代码块基础样式 */
+pre.code-block,
+.code-block {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 13.5px;
+  line-height: 1.7;
+  background: #0a0c10;
+  color: #e4e4e7;
+  border-radius: 12px;
+  padding: 16px 18px;
+  overflow-x: auto;
+  border: 1px solid #1b1f27;
+  position: relative;
+}
+
+/* Markdown 内文样式 */
+.prose-lesson h2 {
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin: 2rem 0 0.75rem;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+.prose-lesson h3 {
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.5rem;
+  color: #e4e4e7;
+}
+.prose-lesson p {
+  margin: 0.85rem 0;
+  color: #c9c9d0;
+  font-size: 15.5px;
+  line-height: 1.8;
+}
+.prose-lesson ul,
+.prose-lesson ol {
+  margin: 0.75rem 0 0.75rem 1.25rem;
+  color: #c9c9d0;
+}
+.prose-lesson ul {
+  list-style: disc;
+}
+.prose-lesson ol {
+  list-style: decimal;
+}
+.prose-lesson li {
+  margin: 0.35rem 0;
+}
+.prose-lesson code:not(pre code) {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.88em;
+  background: rgba(126, 231, 135, 0.08);
+  color: #7ee787;
+  padding: 2px 6px;
+  border-radius: 5px;
+  border: 1px solid rgba(126, 231, 135, 0.18);
+}
+.prose-lesson strong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Python 语法高亮（简易版） */
+.tok-kw { color: #ff79c6; }
+.tok-str { color: #f1fa8c; }
+.tok-num { color: #bd93f9; }
+.tok-com { color: #6272a4; font-style: italic; }
+.tok-fn { color: #50fa7b; }
+.tok-cls { color: #8be9fd; }
+.tok-op { color: #ff79c6; }
+.tok-builtin { color: #8be9fd; }
