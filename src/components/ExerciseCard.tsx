@@ -59,13 +59,17 @@ export default function ExerciseCard({ exercise, exerciseIndex }: ExerciseCardPr
 
       {/* Body */}
       <div className="mt-4">
-        {exercise.type === "fill-blank" ? (
+        {exercise.type === "fill-blank" || exercise.type === "predict-output" ? (
           <div>
             <input
               value={fillValue}
               onChange={(e) => setFillValue(e.target.value)}
               disabled={submitted}
-              placeholder="在此填入答案…"
+              placeholder={
+                exercise.type === "predict-output"
+                  ? "在此输入预期输出…"
+                  : "在此填入答案…"
+              }
               className="w-full rounded-lg border border-ink-600 bg-ink-800/80 px-4 py-2.5 font-mono text-sm text-zinc-100 placeholder-zinc-500 outline-none focus:border-vine-300/60 focus:ring-1 focus:ring-vine-300/30 transition"
             />
           </div>
