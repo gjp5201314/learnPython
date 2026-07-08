@@ -20,7 +20,7 @@ export default function ExerciseCard({ exercise, exerciseIndex }: ExerciseCardPr
   );
 
   const isCorrect = () => {
-    if (exercise.type === "fill-blank") {
+    if (exercise.type === "fill-blank" || exercise.type === "predict-output") {
       return fillValue.trim().toLowerCase() === exercise.answer.trim().toLowerCase();
     }
     return selected === exercise.answer;
@@ -162,8 +162,8 @@ export default function ExerciseCard({ exercise, exerciseIndex }: ExerciseCardPr
             <button
               onClick={handleSubmit}
               disabled={
-                (exercise.type === "fill-blank" && !fillValue.trim()) ||
-                (exercise.type !== "fill-blank" && !selected)
+                ((exercise.type === "fill-blank" || exercise.type === "predict-output") && !fillValue.trim()) ||
+                (exercise.type !== "fill-blank" && exercise.type !== "predict-output" && !selected)
               }
               className="ml-auto inline-flex items-center gap-1.5 rounded-md bg-vine-300 px-4 py-1.5 text-xs font-semibold text-ink-950 shadow-glow-vine transition hover:bg-vine-200 disabled:opacity-40 disabled:shadow-none"
             >
