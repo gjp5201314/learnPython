@@ -15,25 +15,42 @@ const l1: Lesson = {
   content: [
     {
       type: "text",
-      body: "## 什么是变量？\n\n变量是程序用来**存储数据**的容器。你可以把它想象成一个带名字的盒子，盒子里装着值。Python 不需要显式声明类型，解释器会根据赋值自动推断。\n\n```\nname = 'Alice'   # 字符串\nage  = 28        # 整数\npi   = 3.14159   # 浮点数\nis_active = True # 布尔\nnothing = None   # 空值\n```",
+      body: "## 什么是变量？\n\n变量是程序用来**存储数据**的容器。你可以把它想象成一个带名字的盒子，盒子里装着值。Python 不需要显式声明类型，解释器会根据赋值自动推断——这种特性叫**动态类型（dynamic typing）**。\n\n变量的本质其实是**对象引用**：变量名贴在对象上（贴在盒子的盖子上），并不是盒子本身。换句话说，`a = 5` 是让名字 `a` 指向内存中那个值为 `5` 的整数对象。\n\n```\nname = 'Alice'   # 字符串 str\nage  = 28        # 整数 int\npi   = 3.14159   # 浮点数 float\nis_active = True # 布尔 bool\nnothing = None   # 空值 NoneType\n```",
     },
     {
       type: "note",
-      body: "Python 变量名**区分大小写**，且不能以数字开头。推荐使用 `snake_case` 命名风格。",
+      body: "Python 变量名**区分大小写**：`Name` 和 `name` 是两个完全不同的标识符。变量名不能以数字开头（如 `2nd` 不合法），也不能使用关键字（如 `class`、`if`、`for`），推荐使用 PEP 8 规定的 `snake_case` 命名风格（下划线连接的小写单词）。",
+    },
+    {
+      type: "text",
+      body: "## 五大基础类型\n\nPython 一切皆对象，但最常用、最基础的类型有五种：\n\n| 类型 | 关键字 | 例子 | 说明 |\n|------|--------|------|------|\n| 整数 | `int` | `42`, `-7`, `0` | 任意精度，不溢出 |\n| 浮点数 | `float` | `3.14`, `1e-3` | 双精度 IEEE 754 |\n| 字符串 | `str` | `'hi'`, `\"hi\"` | 不可变 Unicode 序列 |\n| 布尔 | `bool` | `True`, `False` | 其实是 int 的子类，`True==1` |\n| 空值 | `NoneType` | `None` | 表示\"没有\"，唯一实例 |",
     },
     {
       type: "code",
       caption: "查看变量类型",
-      body: "name = 'PyPath'\nage = 1\nheight = 1.80\nis_cool = True\n\nprint(type(name))\nprint(type(age))\nprint(type(height))\nprint(type(is_cool))",
+      body: "# 准备 4 个不同类型的变量\nname = 'PyPath'        # str: 用单引号包围\nage = 1                # int: 整数\nheight = 1.80          # float: 带小数点\nis_cool = True         # bool: 注意首字母大写\n\n# type() 内置函数返回变量所属的类型对象\nprint(type(name))      # <class 'str'>\nprint(type(age))       # <class 'int'>\nprint(type(height))    # <class 'float'>\nprint(type(is_cool))   # <class 'bool'>",
     },
     {
       type: "text",
-      body: "## 类型转换\n\n使用 `int()`、`float()`、`str()`、`bool()` 可以在不同类型之间转换。",
+      body: "## 类型转换\n\nPython 不会自动把字符串 `'42'` 当成数字 42——这叫**强类型（strongly-typed）**。需要在不同类型之间显式转换：`int()`、`float()`、`str()`、`bool()`。\n\n转换失败的常见错误：\n- `int('3.14')` 会报 `ValueError`，因为字符串里含小数点。\n- `int('abc')` 也会报 `ValueError`，因为不是数字。\n- `float('inf')` 反而能成功，得到正无穷。",
     },
     {
       type: "code",
       caption: "类型转换示例",
-      body: "x = '42'\ny = int(x)        # '42' -> 42\nz = float('3.5')  # '3.5' -> 3.5\ns = str(123)      # 123 -> '123'\nprint(y + 1)     # 43\nprint(s + '!')   # 123!",
+      body: "# 字符串 -> 数字\nx = '42'\ny = int(x)            # '42' -> 42 (int)\nz = float('3.5')      # '3.5' -> 3.5 (float)\n\n# 数字 -> 字符串\ns = str(123)          # 123 -> '123' (str)\n\n# 任何值 -> 布尔：空值/0/空容器是 False，其余是 True\nprint(bool(0))        # False\nprint(bool(''))       # False\nprint(bool('Py'))     # True\n\nprint(y + 1)          # 43 (整数相加)\nprint(s + '!')        # 123! (字符串拼接)",
+    },
+    {
+      type: "text",
+      body: "## 多重赋值与链式赋值\n\nPython 支持一行同时给多个变量赋值（**元组解包**），也支持链式赋值：",
+    },
+    {
+      type: "code",
+      caption: "多元赋值",
+      body: "# 元组解包：等号右边其实是一个元组 (1, 2, 3)\na, b, c = 1, 2, 3\nprint(a, b, c)        # 1 2 3\n\n# 链式赋值：让多个名字指向同一个对象\nx = y = z = 0\nprint(x, y, z)        # 0 0 0\n\n# 交换两个变量（Python 独有，不需要临时变量）\na, b = 1, 2\na, b = b, a           # 右边先求值成 (2, 1)\nprint(a, b)           # 2 1",
+    },
+    {
+      type: "note",
+      body: "Python 没有传统的**常量**概念。习惯上用**全大写**变量名表示「请勿修改」，例如 `MAX_SIZE = 100`，但语言层面不会阻止重新赋值。",
     },
   ],
   exercises: [
@@ -477,21 +494,34 @@ const l2: Lesson = {
   content: [
     {
       type: "text",
-      body: "## 算术运算符\n\nPython 支持 `+ - * / // % **` 等运算符。其中 `//` 是整除，`%` 取余，`**` 是幂。",
+      body: "## 算术运算符\n\nPython 支持 `+ - * / // % **` 七种算术运算符。注意 Python 没有自增 `++`、自减 `--`，这些运算符在 Python 中不存在！\n\n| 运算符 | 含义 | 例子 | 结果 |\n|--------|------|------|------|\n| `+` | 加 | `7 + 3` | `10` |\n| `-` | 减 | `7 - 3` | `4` |\n| `*` | 乘 | `7 * 3` | `21` |\n| `/` | 真除 | `7 / 3` | `2.3333...` (总是 float) |\n| `//` | 整除（向下取整） | `7 // 3` | `2` |\n| `%` | 取余（模） | `7 % 3` | `1` |\n| `**` | 幂 | `2 ** 10` | `1024` |\n\n特别要注意：\n- `/` 在 Python 3 中**总是**返回 `float`，即使能整除（如 `4 / 2 == 2.0`）。\n- `//` 是**向下取整（floor division）**，`-7 // 3 == -3`（不是 -2），这与「截断取整」不同。\n- `**` 是**右结合**的：`2 ** 3 ** 2 == 2 ** 9 == 512`。",
     },
     {
       type: "code",
       caption: "算术运算",
-      body: "print(7 + 3)    # 10\nprint(7 - 3)    # 4\nprint(7 * 3)    # 21\nprint(7 / 3)    # 2.333...\nprint(7 // 3)   # 2  整除\nprint(7 % 3)    # 1  取余\nprint(2 ** 10)  # 1024 幂",
+      body: "print(7 + 3)    # 10   加法\nprint(7 - 3)    # 4    减法\nprint(7 * 3)    # 21   乘法\nprint(7 / 3)    # 2.3333333333333335  真除（结果是 float）\nprint(7 // 3)   # 2    整除（向下取整）\nprint(7 % 3)    # 1    取余\nprint(2 ** 10)  # 1024 幂运算\n\n# 向下取整的细节：-7 // 3 不是 -2 而是 -3\nprint(-7 // 3)   # -3  向下取整：-2.33... 向下就是 -3\nprint(-7 % 3)    # 2   余数符号与除数一致",
     },
     {
       type: "text",
-      body: "## 比较与逻辑\n\n比较运算符返回 `True/False`，可与 `and` / `or` / `not` 组合形成复合条件。",
+      body: "## 比较运算符\n\n比较运算符返回**布尔值** `True` 或 `False`，可与 `and` / `or` / `not` 组合形成复合条件。\n\n| 运算符 | 含义 | 例子 | 结果 |\n|--------|------|------|------|\n| `==` | 等于 | `5 == 5` | `True` |\n| `!=` | 不等于 | `5 != 6` | `True` |\n| `>` | 大于 | `5 > 3` | `True` |\n| `<` | 小于 | `5 < 3` | `False` |\n| `>=` | 大于等于 | `5 >= 5` | `True` |\n| `<=` | 小于等于 | `5 <= 4` | `False` |\n\n⚠️ 一个等号 `=` 是赋值，两个等号 `==` 才是比较。`==` 比较**值**，`is` 比较**身份**（内存地址），这是两个不同的概念。",
     },
     {
       type: "code",
-      caption: "逻辑判断",
-      body: "age = 20\nhas_id = True\n\nif age >= 18 and has_id:\n    print('可以进入')\nelse:\n    print('禁止进入')",
+      caption: "比较与逻辑",
+      body: "age = 20\nhas_id = True\n\n# and：两者都为真才为真（短路求值，左边为假就不算右边）\nif age >= 18 and has_id:\n    print('可以进入')\nelse:\n    print('禁止进入')\n\n# or：只要一个为真就为真\nscore = 59\nif score < 0 or score > 100:\n    print('分数不合法')\nelse:\n    print('分数合法')\n\n# not：取反\nis_banned = False\nif not is_banned:\n    print('账号正常')",
+    },
+    {
+      type: "text",
+      body: "## 成员与身份运算符\n\n- `in` / `not in`：判断元素是否在容器（列表、字符串、字典等）中。\n- `is` / `is not`：判断两个变量是否指向**同一个对象**（同一个内存地址）。\n\n`is` vs `==` 的关键区别：\n- `==` 比较「值是否相等」，由对象的 `__eq__` 决定。\n- `is` 比较「是不是同一个对象」。\n- 出于性能考虑，Python 缓存了 `-5 ~ 256` 的小整数和简单短字符串，所以 `a is b` 在这些场景下碰巧为 `True`，但**绝不能依赖这个**。",
+    },
+    {
+      type: "code",
+      caption: "is / in / 身份",
+      body: "# in / not in：成员判断\nfruits = ['apple', 'banana']\nprint('apple' in fruits)      # True\nprint('pear' not in fruits)   # True\n\n# is / is not：身份判断\n# 小整数 -5~256 被 Python 缓存，is 结果为 True\na = 100\nb = 100\nprint(a is b)                # True（恰好是缓存对象）\n\n# 列表是引用类型，== 比较值，is 比较身份\nx = [1, 2, 3]\ny = [1, 2, 3]\nprint(x == y)                # True，值相等\nprint(x is y)                # False，两个不同的对象\nprint(x is not y)            # True",
+    },
+    {
+      type: "note",
+      body: "Python 比较支持**链式语法**：`0 < x < 10` 等价于 `0 < x and x < 10`，比 C 语言的写法更优雅，也更不容易出错。",
     },
   ],
   exercises: [
@@ -957,16 +987,38 @@ const l3: Lesson = {
   content: [
     {
       type: "text",
-      body: "## if 语句\n\nPython 使用**缩进**来组织代码块（通常 4 个空格）。",
+      body: "## if / elif / else\n\nPython 用**缩进**来组织代码块——同一个缩进级别的代码属于同一个块。官方推荐使用 **4 个空格**缩进（PEP 8），不要混用空格和 Tab。\n\n- `if` 后面必须跟一个**布尔表达式**（条件）。\n- `elif` = `else if`，可以出现 0 次或多次。\n- `else` 是可选的，最多 1 个，必须放在最后。\n- 每个分支以**冒号 `:`** 结尾，下一行开始缩进的代码块就是这个分支的「身体」。",
     },
     {
       type: "code",
-      caption: "基本条件",
-      body: "score = 85\n\nif score >= 90:\n    grade = 'A'\nelif score >= 80:\n    grade = 'B'\nelif score >= 70:\n    grade = 'C'\nelse:\n    grade = 'D'\n\nprint(f'你的等级是 {grade}')",
+      caption: "基本条件分支",
+      body: "score = 85\n\n# if/elif/else：依次判断条件，命中第一个为真的分支后退出\nif score >= 90:\n    grade = 'A'    # 90 分及以上\nelif score >= 80:\n    grade = 'B'    # 80~89 分\nelif score >= 70:\n    grade = 'C'    # 70~79 分\nelse:\n    grade = 'D'    # 70 分以下\n\nprint(f'你的等级是 {grade}')  # 你的等级是 B",
     },
     {
       type: "note",
-      body: "f-string 是 Python 3.6+ 推荐的字符串格式化方式，比 `%` 和 `format()` 都更直观。",
+      body: "f-string 是 Python 3.6+ 推荐的字符串格式化方式：在字符串前加 `f` 或 `F`，用 `{变量名}` 或 `{表达式}` 把变量/表达式的值嵌入。比 `%` 和 `str.format()` 都更直观、更快。",
+    },
+    {
+      type: "text",
+      body: "## 真值（truthy）与假值（falsy）\n\nPython 不要求 `if` 后必须是比较表达式。任何对象都可以放在 `if` 后面，Python 会调用 `bool()` 把它转成布尔值。\n\n以下是**假值（falsy）**——只有这几种：\n- `False`、`None`\n- 数值 `0`、`0.0`、`0j`\n- 空字符串 `''`\n- 空容器 `[]`、`()`、`{}`、`set()`\n- 自定义了 `__bool__` 返回 `False` 的对象\n\n**其余所有对象**都是真值（truthy），包括负数（如 `-1`）和非空容器。",
+    },
+    {
+      type: "code",
+      caption: "真值判断",
+      body: "# 各种\"空\"和\"0\"都是 falsy\nprint(bool(0))        # False\nprint(bool(''))       # False\nprint(bool([]))       # False\nprint(bool(None))     # False\n\n# 注意：负数也是 truthy\nprint(bool(-1))       # True\nprint(bool([0]))      # True（列表非空，哪怕元素是 0）\n\n# 三元表达式 a if cond else b\nx = -5\nsign = 'positive' if x > 0 else 'non-positive'\nprint(sign)           # non-positive",
+    },
+    {
+      type: "text",
+      body: "## 嵌套条件与 match-case\n\n`if` 里可以再写 `if`，叫**嵌套条件**。嵌套层数太多会让代码难读——能用 `and` 合并的，就别用嵌套。\n\nPython 3.10+ 引入的 `match-case` 适合处理「对变量做多个离散值的匹配」：",
+    },
+    {
+      type: "code",
+      caption: "match-case 模式匹配（Python 3.10+）",
+      body: "# match-case 适合处理多分支、基于模式的匹配\ncommand = 'quit'\n\nmatch command:\n    case 'quit' | 'exit':         # 多个值用 | 分隔\n        print('退出程序')\n    case 'hello':\n        print('你好')\n    case _:                       # _ 通配符，类似 default\n        print('未知命令')",
+    },
+    {
+      type: "note",
+      body: "**最佳实践**：当 `if` 嵌套超过 3 层、或者分支过多时，考虑用 `match-case`（3.10+）或**字典 + 函数映射**来重写，能极大提高可读性。",
     },
   ],
   exercises: [
@@ -1418,21 +1470,43 @@ const l4: Lesson = {
   content: [
     {
       type: "text",
-      body: "## for 循环\n\n`for` 用来遍历**可迭代对象**（如列表、字符串、range）。",
+      body: "## for 循环\n\n`for` 用来遍历**可迭代对象（iterable）**：列表、字符串、`range` 对象、字典、文件等等。每次循环从可迭代对象中「拿出」一个元素，赋给循环变量。\n\n`range` 是最常用的「数字序列生成器」：\n- `range(stop)`：产生 `0, 1, ..., stop-1`\n- `range(start, stop)`：产生 `start, ..., stop-1`\n- `range(start, stop, step)`：从 start 开始，每次加 step",
     },
     {
       type: "code",
-      caption: "for 循环基础",
-      body: "for i in range(5):\n    print(i, end=' ')\nprint()  # 换行\n\nfruits = ['apple', 'banana', 'cherry']\nfor fruit in fruits:\n    print(f'I like {fruit}')",
+      caption: "for 循环与 range",
+      body: "# range(5) 产生 0, 1, 2, 3, 4\nfor i in range(5):\n    print(i, end=' ')\nprint()                       # 0 1 2 3 4 （加 end=' ' 不换行，最后 print() 换行）\n\n# 遍历列表\nfruits = ['apple', 'banana', 'cherry']\nfor fruit in fruits:\n    print(f'I like {fruit}')\n\n# 遍历字符串（字符串也是可迭代对象）\nfor ch in 'Py':\n    print(ch, end='-')         # P-y-\nprint()",
     },
     {
       type: "text",
-      body: "## while 循环\n\n`while` 在条件为真时反复执行。",
+      body: "## while 循环\n\n`while` 在**条件为真**时反复执行循环体。和 `for` 的区别：`for` 用来「遍历已知序列」，`while` 用来「在条件满足时持续做某事」，次数通常不确定。\n\n⚠️ 务必保证循环体内有**改变条件**的语句，否则会陷入**死循环**！",
     },
     {
       type: "code",
       caption: "while 与 break",
-      body: "n = 0\nwhile True:\n    n += 1\n    if n > 3:\n        break\n    print('n =', n)",
+      body: "n = 0\nwhile True:                 # 无限循环\n    n += 1                  # 改变循环条件\n    if n > 3:\n        break                # 满足条件时 break 跳出\n    print('n =', n)\n# 输出：n = 1 / n = 2 / n = 3\n\n# 更常见的写法：while 条件\ncount = 0\nwhile count < 3:\n    print(count)\n    count += 1              # 不要忘了更新条件",
+    },
+    {
+      type: "text",
+      body: "## break、continue 与 else\n\n- `break`：**立即终止**当前循环，跳出循环体。\n- `continue`：**跳过本轮**剩余代码，直接进入下一轮。\n- `for ... else ...` / `while ... else ...`：循环**正常结束**（没被 `break` 打断）时执行 `else` 块。",
+    },
+    {
+      type: "code",
+      caption: "break / continue / else",
+      body: "# continue：跳过偶数\nfor i in range(6):\n    if i % 2 == 0:\n        continue             # 偶数跳过本轮\n    print(i)                 # 1 3 5\n\n# for-else：找到目标就 break，没找到走 else\nnums = [1, 3, 5, 7]\nfor n in nums:\n    if n % 2 == 0:\n        print('找到偶数', n)\n        break\nelse:\n    print('列表中没有偶数')    # 列表全是奇数，走 else",
+    },
+    {
+      type: "text",
+      body: "## 进阶：enumerate / zip / 推导式\n\n- `enumerate(seq)`：遍历时**同时拿到索引和值**。\n- `zip(a, b, ...)`：**并行迭代**多个序列，按位置配对（最短的用完就停）。\n- **列表推导式**：`[表达式 for 变量 in 可迭代对象 if 条件]`，是写循环的紧凑写法。",
+    },
+    {
+      type: "code",
+      caption: "enumerate / zip / 推导式",
+      body: "# enumerate：同时拿索引和值\nfruits = ['apple', 'banana', 'cherry']\nfor i, f in enumerate(fruits):\n    print(i, f)              # 0 apple / 1 banana / 2 cherry\n\n# zip：并行迭代\nnames = ['Alice', 'Bob']\nages  = [30, 25]\nfor n, a in zip(names, ages):\n    print(f'{n} is {a}')     # Alice is 30 / Bob is 25\n\n# 列表推导式：把循环压成一行\nsquares = [i * i for i in range(5)]      # [0, 1, 4, 9, 16]\nevens   = [i for i in range(10) if i % 2 == 0]  # [0, 2, 4, 6, 8]\nprint(squares, evens)",
+    },
+    {
+      type: "note",
+      body: "**性能提醒**：避免在循环里反复做「可以提前算好」的工作。例如 `for i in range(len(lst)):` 一般可以改成 `for i, v in enumerate(lst):`，既快又清楚。",
     },
   ],
   exercises: [
@@ -1899,16 +1973,47 @@ const l5: Lesson = {
   content: [
     {
       type: "text",
-      body: "## 定义函数\n\n使用 `def` 关键字。函数可以有参数和返回值。",
+      body: "## 什么是函数？\n\n函数是一段**可重复调用**的代码块：给它输入（**参数**），它给你输出（**返回值**）。把功能拆成函数的好处：\n\n1. **复用**：写一次、用多次。\n2. **可读**：用一个有意义的名字代替一段细节。\n3. **可测试**：单独验证一段逻辑。\n4. **可维护**：改一处不会牵动全程序。\n\nPython 用 `def` 关键字定义函数：",
     },
     {
       type: "code",
-      caption: "函数定义",
-      body: "def greet(name, greeting='Hello'):\n    \"\"\"返回一个问候语。\"\"\"\n    return f'{greeting}, {name}!'\n\nprint(greet('PyPath'))\nprint(greet('World', greeting='Hi'))",
+      caption: "函数定义与调用",
+      body: "def greet(name, greeting='Hello'):\n    \"\"\"返回一个问候语。\n\n    Args:\n        name: 被问候的对象。\n        greeting: 问候语前缀，默认为 'Hello'。\n    \"\"\"\n    # return 把表达式的值送回调用方，并立即结束函数\n    return f'{greeting}, {name}!'\n\n# 调用：位置参数\nprint(greet('PyPath'))                # Hello, PyPath!\n# 调用：关键字参数（顺序无关）\nprint(greet('World', greeting='Hi'))  # Hi, World!",
     },
     {
       type: "note",
-      body: "参数 `greeting='Hello'` 是**默认参数**。调用时可以省略。",
+      body: "参数 `greeting='Hello'` 是**默认参数**：调用时如果不传，就用默认值。约定上，**默认参数必须放在非默认参数之后**（不然语法不通过）。",
+    },
+    {
+      type: "text",
+      body: "## 参数类型\n\nPython 的参数非常灵活，常见有四类：\n\n| 类型 | 语法 | 用途 |\n|------|------|------|\n| 位置参数 | `def f(a, b):` | 最常见，按位置传 |\n| 默认参数 | `def f(a, b=2):` | 不传时用默认值 |\n| 可变位置参数 | `def f(*args):` | 把多余位置参数打包成**元组** |\n| 可变关键字参数 | `def f(**kwargs):` | 把多余关键字参数打包成**字典** |\n\n⚠️ **参数顺序**必须为：位置参数 → 默认参数 → `*args` → `**kwargs`。",
+    },
+    {
+      type: "code",
+      caption: "各种参数",
+      body: "def demo(a, b=10, *args, **kwargs):\n    print('a =', a)             # 必传位置参数\n    print('b =', b)             # 默认参数\n    print('args =', args)       # 元组，收集多余位置参数\n    print('kwargs =', kwargs)   # 字典，收集多余关键字参数\n\ndemo(1, 2, 3, 4, x=5, y=6)\n# a = 1\n# b = 2\n# args = (3, 4)\n# kwargs = {'x': 5, 'y': 6}",
+    },
+    {
+      type: "text",
+      body: "## 返回值与作用域\n\n- 没有 `return` 的函数，**默认返回 `None`**。\n- `return` 后面的值可以是任何类型：单个值、元组、列表、字典、甚至是另一个函数。\n- `return` 一次可以返回多个值（其实是返回一个**元组**），调用方用**元组解包**接收。\n\n**作用域**决定了变量在哪里可见：\n- **局部（local）**：函数内定义的变量，函数结束就消失。\n- **全局（global）**：模块顶层的变量，整个文件可见。\n- `global` 关键字：让函数内能**改**全局变量。\n- `nonlocal` 关键字：在嵌套函数中**改**外层函数的局部变量。",
+    },
+    {
+      type: "code",
+      caption: "返回值与作用域",
+      body: "# 多返回值（实际是元组）\ndef min_max(nums):\n    return min(nums), max(nums)        # 返回 (最小, 最大)\n\nlo, hi = min_max([3, 1, 4, 1, 5, 9])   # 元组解包\nprint('最小:', lo, '最大:', hi)         # 最小: 1 最大: 9\n\n# global：函数内修改全局变量\ncounter = 0\n\ndef inc():\n    global counter                      # 声明：下面的 counter 是全局的\n    counter += 1\n\ninc(); inc()\nprint('counter =', counter)             # 2",
+    },
+    {
+      type: "text",
+      body: "## 文档字符串（docstring）\n\n函数体内的**第一个**表达式如果是字符串，它会自动成为函数的 `__doc__` 属性。这是给函数写「说明书」的标准方式：\n\n- 简短一行说明：放第一行。\n- 详细参数/返回值说明：可以接多行，常见格式有 Google 风格、Sphinx 风格、NumPy 风格。",
+    },
+    {
+      type: "code",
+      caption: "docstring 与 help()",
+      body: "def add(a, b):\n    \"\"\"两数相加。\n\n    Args:\n        a: 左操作数。\n        b: 右操作数。\n    Returns:\n        a + b 的结果。\n    \"\"\"\n    return a + b\n\n# help() 会打印 __doc__\nhelp(add)\n# 调用方也能看到：函数名.__doc__\nprint(add.__doc__[:9])                  # '两数相加。'",
+    },
+    {
+      type: "note",
+      body: "**类型注解（type hints）**是 Python 3.5+ 的可选特性：`def add(a: int, b: int) -> int:`。它**不影响运行**，但能让 IDE 帮你检查类型错误，也是大型项目的最佳实践。",
     },
   ],
   exercises: [
@@ -2390,17 +2495,34 @@ const l6: Lesson = {
   content: [
     {
       type: "text",
-      body: "## 创建与访问\n\n列表用 `[]` 定义，元素可以是不同类型。",
+      body: "## 什么是列表？\n\n列表（`list`）是 Python 中最常用的数据结构——一个**有序、可变**的序列。它用 `[]` 定义，元素之间用逗号分隔，**类型可以混合**：\n\n- **有序**：每个元素有固定的位置（索引）。\n- **可变（mutable）**：可以增删改元素，原地修改。\n- **允许重复**：可以有多个相等的元素。\n- **可放任意类型**：数字、字符串、列表、字典……\n\n列表底层是一个**动态数组**，按下标访问是 O(1)，但在中间插入/删除是 O(n)。",
     },
     {
       type: "code",
-      caption: "列表基础",
-      body: "nums = [10, 20, 30, 40, 50]\nprint(nums[0])    # 10\nprint(nums[-1])   # 50\nprint(nums[1:4])  # [20, 30, 40]",
+      caption: "创建与索引",
+      body: "nums = [10, 20, 30, 40, 50]\n\n# 正向索引：0, 1, 2, 3, 4\nprint(nums[0])         # 10   第一个\nprint(nums[2])         # 30   中间\n# 负向索引：-1 是最后一个，-len 是第一个\nprint(nums[-1])        # 50   最后一个\nprint(nums[-2])        # 40   倒数第二个\n\n# 切片 [start:stop:step]，左闭右开\nprint(nums[1:4])       # [20, 30, 40]   下标 1, 2, 3\nprint(nums[:3])        # [10, 20, 30]   缺省 start=0\nprint(nums[3:])        # [40, 50]       缺省 stop=末尾+1\nprint(nums[::2])       # [10, 30, 50]   步长 2",
+    },
+    {
+      type: "text",
+      body: "## 增删改查方法\n\n| 方法 | 作用 | 说明 |\n|------|------|------|\n| `lst.append(x)` | 末尾追加 | 返回 `None`，原地修改 |\n| `lst.extend(seq)` | 把 `seq` 的元素逐一追加 | 等价于 `lst += list(seq)` |\n| `lst.insert(i, x)` | 在下标 `i` 处插入 `x` | `i` 越界不会报错，会插到头/尾 |\n| `lst.remove(x)` | 删除**第一个**等于 `x` 的元素 | 找不到会抛 `ValueError` |\n| `lst.pop([i])` | 删除并返回下标 `i` 的元素 | 默认 `i=-1`，弹末尾 |\n| `lst.clear()` | 清空列表 | 等价于 `lst[:] = []` |\n| `lst.index(x)` | 返回 `x` 第一次出现的下标 | 找不到抛 `ValueError` |\n| `lst.count(x)` | 统计 `x` 出现次数 | |\n| `lst.sort()` | 原地排序 | 返回 `None` |\n| `lst.reverse()` | 原地反转 | 返回 `None` |\n| `lst.copy()` | 返回浅拷贝 | 等价于 `lst[:]` |",
     },
     {
       type: "code",
       caption: "常用方法",
-      body: "fruits = ['apple', 'banana']\nfruits.append('cherry')\nfruits.insert(1, 'blueberry')\nprint(fruits)\n\nfruits.remove('banana')\nlast = fruits.pop()\nprint('removed:', last, 'left:', fruits)",
+      body: "fruits = ['apple', 'banana']\nfruits.append('cherry')           # 末尾追加\nfruits.insert(1, 'blueberry')     # 在下标 1 处插入\nprint(fruits)\n# ['apple', 'blueberry', 'banana', 'cherry']\n\nfruits.remove('banana')           # 按值删除\nlast = fruits.pop()               # 弹出末尾，返回该元素\nprint('弹出:', last)               # cherry\nprint('剩余:', fruits)            # ['apple', 'blueberry']\n\n# 排序与反转\nnums = [3, 1, 4, 1, 5, 9, 2, 6]\nnums.sort()                       # 原地升序\nprint(nums)                       # [1, 1, 2, 3, 4, 5, 6, 9]\nnums.reverse()                    # 原地反转\nprint(nums)                       # [9, 6, 5, 4, 3, 2, 1, 1]",
+    },
+    {
+      type: "text",
+      body: "## 列表推导式（List Comprehension）\n\n列表推导式是把「循环 + 条件」压成一行的语法，**比手写循环更快、更可读**：\n\n```\n[表达式 for 变量 in 可迭代对象 if 条件]\n```",
+    },
+    {
+      type: "code",
+      caption: "列表推导式",
+      body: "# 把 0~9 里的偶数平方放进列表\nevens_sq = [i * i for i in range(10) if i % 2 == 0]\nprint(evens_sq)            # [0, 4, 16, 36, 64]\n\n# 二维列表：把 3x3 的坐标列出来\ngrid = [(x, y) for x in range(3) for y in range(3)]\nprint(grid)                # [(0,0), (0,1), (0,2), (1,0), ...]\n\n# 嵌套推导式：展平二维列表\nmatrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\nflat = [n for row in matrix for n in row]\nprint(flat)                # [1, 2, 3, 4, 5, 6, 7, 8, 9]",
+    },
+    {
+      type: "note",
+      body: "**深拷贝 vs 浅拷贝**：`b = a` 让 `b` 和 `a` 指向**同一个**列表，改一个另一个也变。`b = a[:]` 或 `b = a.copy()` 是**浅拷贝**（外层是新列表，内层元素仍共享）。要彻底复制嵌套结构，用 `import copy; b = copy.deepcopy(a)`。",
     },
   ],
   exercises: [
@@ -2903,12 +3025,34 @@ const l7: Lesson = {
   content: [
     {
       type: "text",
-      body: "## 元组 vs 列表\n\n元组用 `()` 定义，**创建后不能修改**。这让它可以作为字典的 key、集合的元素。",
+      body: "## 什么是元组？\n\n元组（`tuple`）是**有序、不可变**的序列，用 `()` 定义，元素之间用逗号分隔。它和列表非常像，但有一个根本区别：**创建后不能修改**——没有 `append` / `remove` / `pop` 等方法。\n\n为什么还要用元组？\n\n1. **可哈希**：能做字典的 key、集合的元素。\n2. **性能更好**：比列表占用更少内存，访问略快。\n3. **语义安全**：函数返回多个值时用元组，明确告诉调用者「不要改」。\n4. **不可变即稳定**：作为「记录」使用（如坐标、RGB 色值）非常合适。",
     },
     {
       type: "code",
-      caption: "元组与解包",
-      body: "point = (3, 4)\nx, y = point   # 解包\nprint(f'x={x}, y={y}')\n\nrgb = (255, 128, 0)\nr, g, b = rgb\nprint('R:', r, 'G:', g, 'B:', b)",
+      caption: "元组基础",
+      body: "# 创建：圆括号可省略，直接用逗号也行\npoint = (3, 4)\nrgb = 255, 128, 0                  # 不用括号也是元组\nprint(type(rgb))                   # <class 'tuple'>\n\n# 单元素元组：必须带逗号，否则就是普通表达式\nsolo = (5,)\nprint(type(solo))                  # <class 'tuple'>\nnot_tuple = (5)\nprint(type(not_tuple))             # <class 'int'>\n\n# 索引和切片跟列表一样\nprint(point[0])                    # 3\nprint(rgb[1:])                     # (128, 0)",
+    },
+    {
+      type: "text",
+      body: "## 元组解包（Tuple Unpacking）\n\n解包是元组最常用的特性：把元组里的元素**一次性**赋给多个变量。它也可以用在 `for` 循环、`return`、函数参数等所有需要「拆开序列」的地方。\n\nPython 3 还引入了 `*` 收集运算符，可以把剩余部分收集到一个列表里：",
+    },
+    {
+      type: "code",
+      caption: "解包与 * 收集",
+      body: "point = (3, 4)\nx, y = point                       # 把 (3,4) 拆成 x=3, y=4\nprint(f'x={x}, y={y}')              # x=3, y=4\n\nrgb = (255, 128, 0)\nr, g, b = rgb\nprint('R:', r, 'G:', g, 'B:', b)    # R: 255 G: 128 B: 0\n\n# * 收集剩余项到列表\nfirst, *rest = (1, 2, 3, 4, 5)\nprint(first)                        # 1\nprint(rest)                         # [2, 3, 4, 5]\n\n# 在 for 循环里直接解包\npairs = [('a', 1), ('b', 2), ('c', 3)]\nfor letter, num in pairs:\n    print(letter, '->', num)",
+    },
+    {
+      type: "text",
+      body: "## 命名元组（namedtuple）\n\n普通元组只能按下标访问（`p[0]`、`p[1]`），可读性差。`collections.namedtuple` 让元组的每个位置**有名字**：\n\n```python\nfrom collections import namedtuple\nPoint = namedtuple('Point', ['x', 'y'])\np = Point(3, 4)\nprint(p.x, p.y)     # 3 4\nprint(p[0], p[1])   # 也支持下标访问\n```\n\n命名元组**仍然是元组**，所以不可变、可哈希。Python 3.7+ 还有更现代的替代品 `typing.NamedTuple`，可以加类型注解和方法。",
+    },
+    {
+      type: "code",
+      caption: "命名元组与不可变",
+      body: "from collections import namedtuple\n\n# 定义一个「Point」类型，有 x、y 两个字段\nPoint = namedtuple('Point', ['x', 'y'])\np = Point(3, 4)\n\nprint(p.x, p.y)                     # 3 4 （用字段名访问）\nprint(p[0], p[1])                   # 3 4 （也支持下标）\nprint(p)                            # Point(x=3, y=4) 友好的 repr\n\n# 不可变：尝试修改会报错\n# p.x = 10   # AttributeError: can't set attribute\n\n# 想「改」一个字段：用 _replace 返回新元组\np2 = p._replace(x=10)\nprint(p, p2)                        # Point(x=3, y=4) Point(x=10, y=4)",
+    },
+    {
+      type: "note",
+      body: "「元组不可变」是相对内容说的——如果元组里装的是**可变对象**（如列表），那个列表本身仍然可以改。元组的不可变是指「元素引用」不变，不是「引用的对象」不变。",
     },
   ],
   exercises: [
@@ -3375,12 +3519,34 @@ const l8: Lesson = {
   content: [
     {
       type: "text",
-      body: "## 字典是映射\n\n字典存储 **key → value** 映射，key 必须是不可变类型。",
+      body: "## 什么是字典？\n\n字典（`dict`）是 Python 中**最强大**的内置数据结构——存储 **key → value** 映射（mapping）。用 `{}` 定义，键值对用 `:` 分隔。\n\n- **查找极快**：平均 O(1)，靠**哈希表**实现。\n- **key 必须可哈希**（不可变）：字符串、数字、元组可以，列表、字典、集合不可以。\n- **value 任意**：任何 Python 对象。\n- **key 唯一**：重复赋值会覆盖。\n- **保留插入顺序**（Python 3.7+）：遍历时按添加的顺序。",
     },
     {
       type: "code",
-      caption: "字典操作",
-      body: "user = {'name': 'Alice', 'age': 28}\nuser['email'] = 'alice@example.com'\nprint(user.get('phone', 'N/A'))\n\nfor k, v in user.items():\n    print(f'{k} = {v}')",
+      caption: "字典基础",
+      body: "# 创建：3 种方式\nuser = {'name': 'Alice', 'age': 28}        # 字面量\nuser2 = dict(name='Bob', age=30)            # dict() 关键字\nuser3 = dict([('name', 'Carol'), ('age', 22)])  # 从 (key, value) 序列\n\n# 增 / 改：通过 key 赋值\nuser['email'] = 'alice@example.com'        # 新增\nuser['age'] = 29                            # 已存在则覆盖\n\n# 查：两种方式\nprint(user['name'])          # Alice      找不到会抛 KeyError\nprint(user.get('phone'))     # None       get 找不到返回 None\nprint(user.get('phone', 'N/A'))  # N/A    get 带默认值\n\n# 删\nif 'email' in user:\n    del user['email']        # 用 del 删除 key",
+    },
+    {
+      type: "text",
+      body: "## 常用方法\n\n| 方法 | 作用 |\n|------|------|\n| `d.keys()` | 返回所有 key 的视图 |\n| `d.values()` | 返回所有 value 的视图 |\n| `d.items()` | 返回所有 (key, value) 的视图 |\n| `d.get(k, default)` | 安全取值，缺 key 返回 default |\n| `d.setdefault(k, default)` | 缺 key 时设置并返回 default |\n| `d.update(other)` | 把 other 的键值对合并到 d（后者覆盖前者） |\n| `d.pop(k, default)` | 删除并返回 k 对应的值 |\n| `d.popitem()` | 删除并返回**最后插入**的 (k, v) 对 |\n| `d.clear()` | 清空字典 |\n| `k in d` | 判断 key 是否存在（**不查 value**） |\n\n⚠️ 经验法则：**查 key 用 `in`，查 value 慢**——后者要遍历整个字典。",
+    },
+    {
+      type: "code",
+      caption: "遍历与合并",
+      body: "user = {'name': 'Alice', 'age': 28, 'city': 'Beijing'}\n\n# 3 种遍历方式\nfor k in user:                  # 默认遍历 key\n    print(k, '->', user[k])\n\nfor k, v in user.items():       # 同时拿 key 和 value\n    print(f'{k} = {v}')\n\nfor v in user.values():         # 只遍历 value\n    print(v)\n\n# 合并：update 原地合并\ndefaults = {'theme': 'dark', 'lang': 'zh'}\noverrides = {'lang': 'en', 'debug': True}\nsettings = {**defaults, **overrides}     # 解包合并，后者覆盖前者\nprint(settings)\n# {'theme': 'dark', 'lang': 'en', 'debug': True}",
+    },
+    {
+      type: "text",
+      body: "## 字典推导式与嵌套\n\n跟列表推导式类似，字典也能用一行循环构造：\n\n```python\n{ key_expr: value_expr for 变量 in 可迭代对象 if 条件 }\n```\n\n字典也支持**嵌套**——value 是另一个字典或列表，这正是 JSON 数据结构的样子。",
+    },
+    {
+      type: "code",
+      caption: "字典推导式与嵌套",
+      body: "# 字典推导式：把列表里的数变成「数 -> 平方」\nsq = {x: x * x for x in range(5)}\nprint(sq)                       # {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}\n\n# 反转字典：value -> key（要求 value 唯一）\ninverse = {v: k for k, v in sq.items()}\nprint(inverse)                  # {0: 0, 1: 1, 4: 2, 9: 3, 16: 4}\n\n# 嵌套字典（类似 JSON）\nusers = {\n    'alice': {'age': 28, 'role': 'admin'},\n    'bob':   {'age': 30, 'role': 'user'},\n}\nprint(users['alice']['role'])   # admin   链式访问",
+    },
+    {
+      type: "note",
+      body: "Python 3.7+ 起，字典**保持插入顺序**；3.8+ 起，`dict.keys()`、`dict.values()`、`dict.items()` 视图都支持**反向迭代** `reversed()`。`collections.OrderedDict` 在新代码里已经很少用了。",
     },
   ],
   exercises: [
@@ -3892,9 +4058,35 @@ const l9: Lesson = {
   estimatedMinutes: 9,
   content: [
     {
+      type: "text",
+      body: "## 什么是集合？\n\n集合（`set`）是**无序、不重复**的元素序列。它用 `{}` 定义（但**不是** key:value），看起来很像字典但只存 key。\n\n- **无序**：没有索引、不能切片、不能按下标访问。\n- **元素唯一**：重复的元素自动去重。\n- **元素必须可哈希**：不能放列表、字典、集合本身。\n- **查找 / 添加极快**：平均 O(1)。\n\n⚠️ **空集合**是 `set()`，**不是** `{}`——`{}` 表示空字典！",
+    },
+    {
+      type: "code",
+      caption: "创建与去重",
+      body: "# 创建：字面量 vs 构造器\nnums = {1, 2, 3, 4}\nempty = set()                  # 注意：{} 是空字典，不是空集合\n\n# 自动去重\nbag = {1, 2, 2, 3, 3, 3}\nprint(bag)                     # {1, 2, 3}\n\n# 从可迭代对象构造\nchars = set('abracadabra')     # 把字符串里每个字符当元素\nprint(chars)                   # {'a', 'b', 'r', 'c', 'd'}\n\n# 增删\ns = {1, 2, 3}\ns.add(4)                      # 加单个\ns.update([5, 6, 7])            # 加多个（接收可迭代对象）\ns.discard(100)                 # 删一个，没有也不报错\ns.remove(1)                    # 删一个，没有会抛 KeyError\nprint(s)                       # {2, 3, 4, 5, 6, 7}",
+    },
+    {
+      type: "text",
+      body: "## 集合运算\n\n集合的强大之处在于**数学上的集合运算**——这正是它最适合的应用场景：去重、关系判断。\n\n| 运算 | 符号 | 方法 | 含义 |\n|------|------|------|------|\n| 并集 | `a \\| b` | `a.union(b)` | 属于 a 或 b 的全部元素 |\n| 交集 | `a & b` | `a.intersection(b)` | 同时属于 a 和 b 的元素 |\n| 差集 | `a - b` | `a.difference(b)` | 属于 a 但不属于 b 的元素 |\n| 对称差 | `a ^ b` | `a.symmetric_difference(b)` | 不同时属于两者的元素 |\n| 子集 | `a <= b` | `a.issubset(b)` | a 的元素都在 b 里 |\n| 超集 | `a >= b` | `a.issuperset(b)` | b 的元素都在 a 里 |",
+    },
+    {
       type: "code",
       caption: "集合运算",
-      body: "a = {1, 2, 3, 4}\nb = {3, 4, 5, 6}\n\nprint('并集', a | b)\nprint('交集', a & b)\nprint('差集', a - b)\nprint('对称差', a ^ b)",
+      body: "a = {1, 2, 3, 4}\nb = {3, 4, 5, 6}\n\nprint('并集  a | b =', a | b)         # {1, 2, 3, 4, 5, 6}\nprint('交集  a & b =', a & b)         # {3, 4}\nprint('差集  a - b =', a - b)         # {1, 2} （a 有 b 没有）\nprint('对称差 a ^ b =', a ^ b)         # {1, 2, 5, 6}\n\n# 关系判断\nprint('a 是 b 的子集:', a <= b)        # False\nprint('a 是 b 的真子集:', a < b)       # False\n\n# 实战：找两个列表的公共元素（O(n) 比双重循环快）\nlist_a = ['py', 'js', 'go', 'rs']\nlist_b = ['go', 'rs', 'kt']\ncommon = set(list_a) & set(list_b)    # {'go', 'rs'}\nprint('公共:', common)",
+    },
+    {
+      type: "text",
+      body: "## 不可变集合 frozenset\n\n`set` 是可变的，所以不能做字典的 key、集合的元素。`frozenset` 是 `set` 的**不可变**版本，可以在需要「集合做 key」的场景使用。\n\n`frozenset` 拥有 `set` 的**所有读取操作**（`in`、`|`、`&`、`-`、`^`、`<=`），但**没有**任何修改操作（没有 `add` / `update` / `remove`）。",
+    },
+    {
+      type: "code",
+      caption: "frozenset 不可变集合",
+      body: "# frozenset：不可变的 set\nfs = frozenset([1, 2, 3, 2, 1])\nprint(fs)                              # frozenset({1, 2, 3})\n\n# 可哈希：能做字典的 key、集合的元素\nd = {fs: 'ok'}                          # 合法\nprint(d[fs])                            # 'ok'\n\n# 运算跟 set 一样\nprint(fs | {3, 4})                       # frozenset({1, 2, 3, 4})\nprint(fs & {2, 3})                       # frozenset({2, 3})\n\n# 修改操作不允许\n# fs.add(4)                              # AttributeError",
+    },
+    {
+      type: "note",
+      body: "**什么时候用 set？** 三个最常见场景：① **去重**（`list(set(x))`）；② **快速判断元素是否存在**（`x in my_set`，O(1)）；③ **集合运算**（求两个集合的交集、并集）。其他场景一般用列表或字典。",
     },
   ],
   exercises: [
@@ -4413,9 +4605,44 @@ const l10: Lesson = {
   estimatedMinutes: 11,
   content: [
     {
+      type: "text",
+      body: "## 字符串的本质\n\n字符串（`str`）是 Python 中**不可变**的 Unicode 字符序列。任何想「修改」字符串的操作——其实都是**返回了一个新字符串**，原字符串不变。\n\n字符串用**单引号** `'...'`、**双引号** `\"...\"` 或**三引号** `'''...'''` / `\"\"\"...\"\"\"` 定义。三引号可跨行，常用于写多行文本或文档字符串。\n\n```python\ns = 'hello'            # 单引号\ns = \"hello\"            # 双引号（跟单引号完全等价，方便字符串里包含引号）\ns = '''hello\nworld'''               # 三引号，跨行\n```",
+    },
+    {
+      type: "code",
+      caption: "字符串不可变",
+      body: "s = 'hello'\n# s[0] = 'H'   # TypeError: 'str' does not support item assignment\n\n# 想「改」其实是创建新字符串\ns2 = 'H' + s[1:]\nprint(s2)            # Hello\nprint(s)             # hello  （原字符串没变）\n\n# 三引号定义多行字符串\npoem = '''床前明月光，\n疑是地上霜。'''\nprint(poem)",
+    },
+    {
+      type: "text",
+      body: "## 切片与索引\n\n字符串和列表一样支持索引和切片——返回的还是字符串。\n\n```\n  h  e  l  l  o\n  0  1  2  3  4\n -5 -4 -3 -2 -1\n```\n\n切片语法 `s[start:stop:step]` 也是左闭右开；`step` 为负数表示反向。",
+    },
+    {
+      type: "code",
+      caption: "字符串切片",
+      body: "s = 'Hello, World!'\n\nprint(s[0])            # H\nprint(s[-1])           # !\nprint(s[7:])           # World!\nprint(s[:5])           # Hello\nprint(s[::2])          # Hlo ol!  （隔一个取一个）\nprint(s[::-1])         # !dlroW ,olleH  （反转）",
+    },
+    {
+      type: "text",
+      body: "## 常用字符串方法\n\n字符串方法不会改变原字符串，而是**返回新字符串**。\n\n| 分类 | 方法 | 作用 |\n|------|------|------|\n| 大小写 | `s.upper()` / `s.lower()` | 全部大写 / 小写 |\n|       | `s.capitalize()` / `s.title()` | 首字母 / 每个单词首字母大写 |\n| 查找 | `s.find(sub)` / `s.index(sub)` | 找子串下标；`index` 找不到会抛异常 |\n|       | `s.count(sub)` | 统计子串出现次数 |\n| 判断 | `s.startswith(p)` / `s.endswith(p)` | 是否以 p 开头 / 结尾 |\n|       | `s.isdigit()` / `s.isalpha()` / `s.isalnum()` | 是否纯数字 / 纯字母 / 字母数字 |\n| 修剪 | `s.strip()` / `s.lstrip()` / `s.rstrip()` | 去掉首尾（左 / 右）空白 |\n| 替换 | `s.replace(old, new, count)` | 替换子串 |\n| 拆分 | `s.split(sep)` | 按分隔符拆成列表 |\n| 拼接 | `sep.join(seq)` | 用分隔符把序列拼成字符串 |\n| 格式化 | `f'...{expr}...'` / `s.format()` | 把值嵌入字符串 |",
+    },
+    {
       type: "code",
       caption: "字符串方法",
-      body: "s = '  PyPath is Awesome  '\nprint(s.strip())\nprint(s.lower())\nprint(s.upper())\nprint(s.replace('Awesome', 'Powerful'))\nprint(','.join(['a', 'b', 'c']))",
+      body: "s = '  PyPath is Awesome  '\n\nprint(s.strip())                              # 去掉首尾空白\nprint(s.lower())                              # 全小写\nprint(s.upper())                              # 全大写\nprint(s.replace('Awesome', 'Powerful'))       # 替换\nprint(','.join(['a', 'b', 'c']))              # join 拼接\n\n# split：把字符串拆成列表\ncsv = 'apple,banana,cherry'\nfruits = csv.split(',')\nprint(fruits)                                 # ['apple', 'banana', 'cherry']\n\n# find / count\ns2 = 'hello world'\nprint(s2.find('o'))                           # 4  （第一次出现的下标）\nprint(s2.count('o'))                          # 2\n\n# 判断类\nprint('123'.isdigit())                        # True\nprint('py'.isalpha())                         # True",
+    },
+    {
+      type: "text",
+      body: "## 字符串格式化：f-string\n\nPython 提供 3 种字符串格式化方式：\n- **`%` 格式化**（C 风格）：老式，不推荐。\n- **`str.format()`**：通用，但啰嗦。\n- **f-string**（Python 3.6+）：**推荐**，在字符串前加 `f` 或 `F`，用 `{表达式}` 嵌入。\n\nf-string 支持**格式说明符**（在 `:` 之后）控制显示精度、宽度、对齐、进制等：",
+    },
+    {
+      type: "code",
+      caption: "f-string 格式化",
+      body: "name = 'PyPath'\nscore = 95.6789\n\n# 基础用法：直接把变量/表达式放 {} 里\ngreeting = f'Hello, {name}! 你考了 {score} 分'\nprint(greeting)\n\n# 格式说明符：保留 2 位小数、宽度 10 右对齐\nprint(f'{score:.2f}')              # 95.68\nprint(f'{score:10.2f}')            # '     95.68'\nprint(f'{score:010.2f}')           # '0000095.68'  （前面补 0）\n\n# 进制、百分比\nn = 255\nprint(f'{n:#x}')                   # 0xff  十六进制带前缀\nprint(f'{0.876:.1%}')              # 87.6%\n\n# 调用函数 / 表达式\nprint(f'名字大写：{name.upper()}')  # 名字大写：PYPATH",
+    },
+    {
+      type: "note",
+      body: "**字符串是不可变的**——这是 Python 的重要设计。任何字符串方法（`replace`、`strip`、切片等）都返回**新字符串**。如果要做大量拼接，用 `''.join(list_of_parts)` 比 `+` 高效得多，避免反复创建中间对象。",
     },
   ],
   exercises: [
@@ -4939,12 +5166,34 @@ const l11: Lesson = {
   content: [
     {
       type: "text",
-      body: "## 定义类\n\n类（class）是创建对象的模板。`__init__` 是构造方法。",
+      body: "## 面向对象编程（OOP）\n\nPython 是一门**多范式**语言，既支持过程式也支持面向对象。面向对象的核心是把**数据**和**行为**绑在一起：\n\n- **类（class）**：对象的「模板」/「蓝图」，描述一类事物共有的属性和行为。\n- **对象（object / instance）**：根据类创建的具体实例。\n- **属性（attribute）**：对象的数据。\n- **方法（method）**：对象的行为（定义在类里的函数）。\n\n为什么要用 OOP？\n1. **封装**：把数据和操作数据的逻辑聚拢在一起。\n2. **抽象**：隐藏复杂细节，只暴露简单接口。\n3. **继承**：子类复用父类代码。\n4. **多态**：同样的接口、不同的实现。",
     },
     {
       type: "code",
       caption: "第一个类",
-      body: "class Dog:\n    def __init__(self, name, age):\n        self.name = name\n        self.age  = age\n\n    def bark(self):\n        return f'{self.name}: 汪汪！'\n\nd = Dog('旺财', 3)\nprint(d.bark())",
+      body: "class Dog:\n    \"\"\"一个简单的 Dog 类。\"\"\"\n\n    # 构造方法：实例化时自动调用\n    # self 指向当前实例，约定俗成叫 self（不是关键字，但强烈推荐）\n    def __init__(self, name, age):\n        self.name = name        # 实例属性\n        self.age  = age\n\n    # 实例方法：第一个参数必须是 self\n    def bark(self):\n        return f'{self.name}: 汪汪！'\n\n    def info(self):\n        return f'{self.name}, {self.age} 岁'\n\n# 创建实例（实例化）\nd = Dog('旺财', 3)\nprint(d.bark())                # 旺财: 汪汪！\nprint(d.info())                # 旺财, 3 岁",
+    },
+    {
+      type: "text",
+      body: "## `__init__` 与 self\n\n- `__init__(self, ...)` 是**构造方法**：实例化时 Python 自动调用，**不能**有返回值（只能 `return None`）。\n- `self` 不是关键字，只是约定——它指向**当前正在操作的对象本身**。在 `d.bark()` 这行代码里，`self` 就是 `d`。\n- 第一个参数永远是 `self`，调用时**不需要**传，Python 自动帮你传。",
+    },
+    {
+      type: "code",
+      caption: "__init__ 与 self",
+      body: "class Point:\n    def __init__(self, x, y):\n        # 把参数绑定到实例上，self.x / self.y 是「实例属性」\n        self.x = x\n        self.y = y\n\n    def move(self, dx, dy):\n        self.x += dx\n        self.y += dy\n\n    def __repr__(self):\n        # __repr__ 是 Python 调试时显示对象的字符串\n        return f'Point({self.x}, {self.y})'\n\np = Point(1, 2)               # 自动调用 __init__\np.move(3, 4)\nprint(p)                       # Point(4, 6)",
+    },
+    {
+      type: "text",
+      body: "## 类属性 vs 实例属性\n\n- **实例属性**：写在 `__init__` 里（或 `self.xxx`），**每个实例**独立一份。\n- **类属性**：写在类的内部、方法之外，**所有实例共享**一份。\n\n类属性常用来定义常量或共享的状态（如计数器）。",
+    },
+    {
+      type: "code",
+      caption: "类属性与实例属性",
+      body: "class Circle:\n    pi = 3.14159                # 类属性：所有圆共享\n\n    def __init__(self, r):\n        self.r = r              # 实例属性：每个圆自己的半径\n\n    def area(self):\n        return Circle.pi * self.r * self.r   # 用类名访问类属性\n\nc1 = Circle(1)\nc2 = Circle(2)\nprint(c1.area(), c2.area())    # 3.14159  12.56636\n\n# 改类属性，所有实例都受影响（除非实例自己定义了同名属性）\nCircle.pi = 3.14\nprint(c1.area())                # 3.14",
+    },
+    {
+      type: "note",
+      body: "**`__init__` 不是构造方法？** 严格说，`__new__` 才是创建实例的方法（负责「分配内存」），`__init__` 是「初始化方法」。99% 的情况下只需要重写 `__init__`。如果要实现单例、缓存等高级模式才需要碰 `__new__`。",
     },
   ],
   exercises: [
@@ -5424,9 +5673,35 @@ const l12: Lesson = {
   estimatedMinutes: 12,
   content: [
     {
+      type: "text",
+      body: "## 什么是继承？\n\n继承（inheritance）是 OOP 的核心机制之一：子类**复用**父类的属性和方法，并可以**扩展**或**重写**它们。\n\n```python\nclass 子类名(父类名):\n    ...\n```\n\n继承让代码遵循 DRY 原则（Don't Repeat Yourself）。常见术语：\n- **父类 / 基类 / 超类**（parent / base / super）\n- **子类 / 派生类**（child / derived / subclass）\n- **重写 / 覆盖**（override）：子类定义跟父类同名的方法。",
+    },
+    {
       type: "code",
-      caption: "继承示例",
-      body: "class Animal:\n    def __init__(self, name):\n        self.name = name\n    def speak(self):\n        return f'{self.name} 发出声音'\n\nclass Cat(Animal):\n    def speak(self):\n        return f'{self.name}: 喵~'\n\nprint(Cat('Tom').speak())",
+      caption: "单继承与方法重写",
+      body: "class Animal:\n    \"\"\"父类：动物\"\"\"\n    def __init__(self, name):\n        self.name = name\n\n    def speak(self):\n        # 父类的默认实现\n        return f'{self.name} 发出声音'\n\nclass Cat(Animal):\n    \"\"\"子类：猫，继承自动物\"\"\"\n    def speak(self):                     # 重写父类的 speak\n        return f'{self.name}: 喵~'\n\n# 子类实例既能用父类的方法，也能用自己重写的方法\nc = Cat('Tom')\nprint(c.speak())                         # Tom: 喵~   （调用重写后的）\nprint(c.name)                            # Tom        （继承自父类的属性）",
+    },
+    {
+      type: "text",
+      body: "## super() 调用父类\n\n`super()` 返回父类的代理对象，常用于在子类中**调用被重写的父类方法**——典型场景是 `__init__`，既保留父类的初始化逻辑，又加入子类的扩展。\n\n`super()` 的好处：\n1. **避免硬编码父类名**：将来父类名改了不用满世界改代码。\n2. **正确处理多继承**：配合 MRO 工作，不会重复调用。\n\n调用语法：`super().方法名(参数)`，**不需要**传 `self`。",
+    },
+    {
+      type: "code",
+      caption: "super()",
+      body: "class Animal:\n    def __init__(self, name):\n        self.name = name\n\nclass Cat(Animal):\n    def __init__(self, name, color):\n        # super().__init__(name) 等价于 Animal.__init__(self, name)\n        super().__init__(name)          # 复用父类的初始化\n        self.color = color              # 子类自己的属性\n\n    def __repr__(self):\n        return f'Cat({self.name}, {self.color})'\n\nc = Cat('Tom', 'white')\nprint(c)                                 # Cat(Tom, white)",
+    },
+    {
+      type: "text",
+      body: "## 多继承与 MRO\n\nPython 支持**多继承**：在类名后用逗号分隔多个父类。\n\n```python\nclass C(A, B):\n    ...\n```\n\n当多个父类有同名方法时，Python 怎么决定调哪个？靠 **MRO（Method Resolution Order，方法解析顺序）**。\n\n- Python 用 **C3 线性化算法** 计算 MRO，保证顺序**单调、可预测**。\n- 查看方式：`Class.mro()` 或 `Class.__mro__`。\n- 查找属性时，按 MRO 顺序**自下而上**、**从左到右**搜索。",
+    },
+    {
+      "type": "code",
+      "caption": "多继承与 MRO",
+      "body": "class A:\n    def hello(self):\n        return 'A'\n\nclass B:\n    def hello(self):\n        return 'B'\n\nclass C(A, B):                    # A 在前，优先 A\n    pass\n\nprint(C().hello())                 # A   （按 MRO 找 A 的版本）\nprint(C.mro())                     # [C, A, B, object]",
+    },
+    {
+      "type": "note",
+      "body": "**Mixin 模式**：多继承的典型用法是把若干「小功能类」按需组合进主类。每个 Mixin 通常以 `Mixin` 结尾命名，只实现一两个方法，不依赖其他类。例如 `class MyClass(Base, LogMixin, JsonMixin):` 就是常见的搭配。",
     },
   ],
   exercises: [
@@ -5950,9 +6225,44 @@ const l13: Lesson = {
   estimatedMinutes: 11,
   content: [
     {
+      type: "text",
+      body: "## 什么是封装？\n\n封装（encapsulation）是把**数据**和**操作数据的代码**绑在一起，并**对外隐藏实现细节**——只暴露简单、安全的接口。\n\nPython 没有真正的「private」关键字，但有**命名约定**：\n\n| 形式 | 名称 | 含义 |\n|------|------|------|\n| `self.x` | 公有 | 自由访问 |\n| `self._x` | 保护（约定） | 「不要从外部访问」，但语言不阻止 |\n| `self.__x` | 名称改写 | 触发 **name mangling**，外部**很难**直接访问 |\n\n⚠️ 关键理解：`_x` 是**约定**，外部仍可访问；`__x` 是**机制**，会被改成 `_ClassName__x`，避免子类意外覆盖。",
+    },
+    {
       type: "code",
-      caption: "封装",
-      body: "class BankAccount:\n    def __init__(self, balance=0):\n        self._balance = balance\n    @property\n    def balance(self):\n        return self._balance\n    def deposit(self, amount):\n        if amount <= 0:\n            raise ValueError('必须为正数')\n        self._balance += amount\n\nacc = BankAccount(100)\nacc.deposit(50)\nprint('余额:', acc.balance)",
+      caption: "私有属性与名称改写",
+      body: "class BankAccount:\n    def __init__(self, balance=0):\n        # 约定私有：外部最好别直接动 _balance\n        self._balance = balance\n\nacc = BankAccount(100)\nprint(acc._balance)            # 100  （技术能访问，但不推荐）\n\nclass Secret:\n    def __init__(self):\n        # 双下划线：触发 name mangling\n        self.__token = 'shh'\n\ns = Secret()\n# print(s.__token)             # AttributeError\nprint(s._Secret__token)        # shh  （强制访问的途径）",
+    },
+    {
+      type: "text",
+      body: "## `@property`：把方法变属性\n\n`@property` 装饰器把**方法**包装成**只读属性**：调用时**不用加括号**，但能像属性一样访问。\n\n为什么要这么做？\n1. 隐藏内部存储（用 `_xxx`），只暴露 `xxx` 作为只读接口。\n2. 读取时可以做校验、计算、缓存。\n3. 配合 `@xxx.setter` 可以**受控地**允许修改。",
+    },
+    {
+      type: "code",
+      caption: "@property 实战",
+      body: "class BankAccount:\n    def __init__(self, balance=0):\n        self._balance = balance       # 内部真实存储\n\n    @property\n    def balance(self):\n        \"\"\"只读属性：暴露给外部的余额\"\"\"\n        return self._balance\n\n    @balance.setter\n    def balance(self, value):\n        if value < 0:\n            raise ValueError('余额不能为负')\n        self._balance = value\n\n    def deposit(self, amount):\n        if amount <= 0:\n            raise ValueError('存款必须为正')\n        self._balance += amount\n\nacc = BankAccount(100)\nacc.deposit(50)\nprint('余额:', acc.balance)         # 像属性一样访问，不用加括号\n\nacc.balance = 200                   # 通过 setter 修改\nprint('新余额:', acc.balance)       # 200",
+    },
+    {
+      type: "text",
+      body: "## 多态（Polymorphism）\n\n多态 = **同一接口，不同实现**。调用方只关心「能不能用」，不关心「具体是谁」。\n\nPython 的多态分两层：\n1. **子类继承 / 方法重写**：经典 OO 多态。\n2. **鸭子类型（Duck Typing）**：「如果它走起来像鸭子、叫起来像鸭子，那它就是鸭子」——Python 根本不检查类型，只看**有没有对应的方法/属性**。",
+    },
+    {
+      type: "code",
+      caption: "多态与鸭子类型",
+      body: "class Dog:\n    def speak(self):\n        return '汪汪'\n\nclass Cat:\n    def speak(self):\n        return '喵喵'\n\nclass Robot:                  # 根本没继承任何动物类\n    def speak(self):\n        return '哔哔'\n\ndef make_speak(animal):       # 不管传什么，只要它有 speak() 就行\n    return animal.speak()\n\nprint(make_speak(Dog()))       # 汪汪\nprint(make_speak(Cat()))       # 喵喵\nprint(make_speak(Robot()))     # 哔哔   鸭子类型",
+    },
+    {
+      type: "text",
+      body: "## 抽象基类（ABC）\n\n如果想**强制**子类实现某些方法，可以使用 `abc` 模块定义**抽象基类**：\n\n```python\nfrom abc import ABC, abstractmethod\n\nclass Shape(ABC):\n    @abstractmethod\n    def area(self): ...\n    @abstractmethod\n    def perimeter(self): ...\n```\n\n- 继承 `ABC` 的类，**包含未实现的抽象方法时不能被实例化**。\n- 子类必须实现所有 `@abstractmethod` 才能实例化。\n- 抽象基类主要起**规范/约束**作用，是鸭子类型的一种「补充」。",
+    },
+    {
+      type: "code",
+      caption: "抽象基类 ABC",
+      body: "from abc import ABC, abstractmethod\n\nclass Shape(ABC):\n    @abstractmethod\n    def area(self):\n        \"\"\"子类必须实现 area\"\"\"\n        ...\n\nclass Square(Shape):\n    def __init__(self, side):\n        self.side = side\n\n    def area(self):                     # 必须实现，否则报错\n        return self.side * self.side\n\n# s = Shape()                          # TypeError: Can't instantiate abstract class\nsq = Square(5)\nprint('正方形面积:', sq.area())         # 25",
+    },
+    {
+      type: "note",
+      body: "**Python 推崇鸭子类型**——「问问行为，不要问血统」。但 ABC 也有用：在大型项目里、给第三方写插件时，抽象基类能**显式声明**「调用方需要的能力」，让代码更可读、错误更早暴露。两者结合是 Python 风格的最佳实践。",
     },
   ],
   exercises: [
@@ -6452,9 +6762,40 @@ const l14: Lesson = {
   estimatedMinutes: 10,
   content: [
     {
+      type: "text",
+      body: "## 什么是魔术方法？\n\n魔术方法（dunder methods，**d**ouble **under**score）是 Python 的「钩子」：它们以双下划线开头和结尾（如 `__init__`、`__add__`），**由 Python 解释器在特定场景下自动调用**，让自定义类能像内置类型一样工作。\n\n你不需要直接调用魔术方法——你定义它们，Python 替你调用。比如：\n- `a + b` → `a.__add__(b)`\n- `len(obj)` → `obj.__len__()`\n- `print(obj)` → `obj.__str__()`（或 `__repr__`）\n- `for x in obj` → `obj.__iter__()`\n- `obj[k]` → `obj.__getitem__(k)`",
+    },
+    {
       type: "code",
-      caption: "魔术方法",
-      body: "class Vector:\n    def __init__(self, x, y):\n        self.x, self.y = x, y\n    def __add__(self, other):\n        return Vector(self.x + other.x, self.y + other.y)\n    def __repr__(self):\n        return f'Vector({self.x}, {self.y})'\n\nv = Vector(1, 2) + Vector(3, 4)\nprint(v)",
+      caption: "Vector 的加法与字符串",
+      body: "class Vector:\n    def __init__(self, x, y):\n        self.x, self.y = x, y\n\n    # 实现 + 运算符：a + b 等价于 a.__add__(b)\n    def __add__(self, other):\n        return Vector(self.x + other.x, self.y + other.y)\n\n    # 实现 print() / str() 时的字符串\n    def __repr__(self):\n        return f'Vector({self.x}, {self.y})'\n\n# 像数字一样相加\nv = Vector(1, 2) + Vector(3, 4)\nprint(v)                                # Vector(4, 6)\nprint(repr(v))                          # Vector(4, 6)",
+    },
+    {
+      type: "text",
+      body: "## 常用魔术方法速查\n\n| 魔术方法 | 触发场景 | 说明 |\n|---------|---------|------|\n| `__init__(self, ...)` | `Class(...)` | 构造/初始化 |\n| `__repr__(self)` | `repr(obj)` / REPL | 「官方」字符串，理想情况是能 `eval` 重建对象 |\n| `__str__(self)` | `str(obj)` / `print(obj)` | 给用户看的字符串 |\n| `__len__(self)` | `len(obj)` | 必须返回非负整数 |\n| `__getitem__(self, k)` | `obj[k]` | 下标访问 |\n| `__setitem__(self, k, v)` | `obj[k] = v` | 下标赋值 |\n| `__contains__(self, x)` | `x in obj` | 成员判断 |\n| `__iter__(self)` | `for x in obj` | 返回一个**迭代器** |\n| `__next__(self)` | `next(it)` | 迭代器的下一个值 |\n| `__eq__(self, other)` | `obj == other` | 相等判断 |\n| `__lt__` / `__gt__` | `obj < other` | 大小比较 |\n| `__add__(self, other)` | `obj + other` | 加法 |\n| `__call__(self, ...)` | `obj(...)` | 让对象**像函数**一样被调用 |\n| `__hash__(self)` | `hash(obj)` / 做 set/dict key | 哈希值 |\n| `__enter__` / `__exit__` | `with obj:` | 上下文管理器（`with` 语句） |",
+    },
+    {
+      type: "code",
+      caption: "完整示例：可比较、可迭代、可调用的对象",
+      body: "class Stack:\n    def __init__(self):\n        self._items = []\n\n    def push(self, x):\n        self._items.append(x)\n\n    # 让对象能用于 len()\n    def __len__(self):\n        return len(self._items)\n\n    # 让对象能迭代\n    def __iter__(self):\n        return iter(self._items)        # 委托给列表\n\n    # 让 print() 友好\n    def __repr__(self):\n        return f'Stack({self._items!r})'\n\ns = Stack()\ns.push(1); s.push(2); s.push(3)\nprint(len(s))                # 3\nfor x in s:\n    print(x)                 # 1 2 3\nprint(s)                     # Stack([1, 2, 3])",
+    },
+    {
+      type: "code",
+      caption: "__call__ 让对象像函数",
+      body: "class Adder:\n    \"\"\"可调用对象：每次调用把数字加 step\"\"\"\n    def __init__(self, step):\n        self.step = step\n\n    def __call__(self, x):\n        return x + self.step\n\nadd5 = Adder(5)\nprint(add5(10))              # 15   对象像函数一样被调用\nprint(add5(-3))              # 2",
+    },
+    {
+      type: "text",
+      body: "## 让对象可哈希 + 可比较\n\n如果想让自定义类的实例能做 **set 元素** / **dict 的 key**，需要：\n\n1. 实现 `__eq__`：定义「相等」的语义。\n2. 实现 `__hash__`：返回一个稳定的整数（相等对象应有相同 hash）。\n\n如果**不重写** `__eq__`，Python 默认按**对象身份**（内存地址）比较，相同对象才相等——这往往不是你想要的。\n\n如果定义了 `__eq__` 而没定义 `__hash__`，Python 会**自动把 `__hash__` 设为 None**，对象立刻就**不能**放进 set 或做 dict key。",
+    },
+    {
+      type: "code",
+      caption: "__eq__ 与 __hash__",
+      body: "class Point:\n    def __init__(self, x, y):\n        self.x, self.y = x, y\n\n    def __eq__(self, other):\n        # 把「相等」定义为「坐标相同」\n        return isinstance(other, Point) and self.x == other.x and self.y == other.y\n\n    def __hash__(self):\n        # 相等对象必须有相同 hash\n        return hash((self.x, self.y))\n\n    def __repr__(self):\n        return f'Point({self.x}, {self.y})'\n\np1 = Point(1, 2)\np2 = Point(1, 2)\nprint(p1 == p2)              # True   （按值相等）\nprint({p1, p2})              # {Point(1, 2)}  （去重了）",
+    },
+    {
+      type: "note",
+      body: "**小技巧**：想让自定义类**只读**？可以定义 `__slots__` = `('x', 'y')`，这样实例只能有 `x`、`y` 两个属性，**不能动态添加**新属性，且**节省内存**（不用 `__dict__`）。这是 Python 性能优化和约束设计的常见手段。",
     },
   ],
   exercises: [
@@ -6913,9 +7254,44 @@ const l15: Lesson = {
   estimatedMinutes: 9,
   content: [
     {
+      type: "text",
+      body: "## 模块（Module）\n\n在 Python 中，**每个 `.py` 文件都是一个模块**。把代码拆到不同文件里，能避免单个文件过大、方便多人协作、也能复用别人写好的代码（标准库、第三方库）。\n\n导入模块有 4 种常见写法：\n\n```python\nimport math                       # 导入整个模块，用 math.sqrt(4)\nfrom math import sqrt             # 导入指定名字，用 sqrt(4)\nfrom math import sqrt as sq       # 导入并起别名\nimport math as m                  # 模块起别名\n```\n\n⚠️ 经验法则：**优先用 `import 模块名`**，避免命名冲突，调用也清晰（`math.sqrt` 一眼就知道是数学库）。",
+    },
+    {
       type: "code",
-      caption: "模块使用",
-      body: "import math\nfrom random import randint\n\nprint(math.sqrt(16))\nprint(randint(1, 10))",
+      caption: "import 模块",
+      body: "import math\nfrom random import randint\nfrom collections import Counter as Cnt   # 导入并起别名\n\n# 1. 标准库模块\nprint(math.sqrt(16))            # 4.0   （math 模块的 sqrt 函数）\nprint(math.pi)                  # 3.14159...\n\n# 2. from 导入：直接用名字，但可能与自己的变量冲突\nprint(randint(1, 10))           # 1~10 随机整数\n\n# 3. 计数器（高级数据结构）\nwords = ['py', 'js', 'py', 'go', 'py']\nprint(Cnt(words))                # Counter({'py': 3, 'js': 1, 'go': 1})",
+    },
+    {
+      type: "text",
+      body: "## `if __name__ == '__main__'` 模式\n\n每个模块都有一个内置属性 `__name__`：\n- 当文件**被直接运行**时，`__name__ == '__main__'`。\n- 当文件**被 import** 时，`__name__` 等于**模块名**。\n\n所以 `if __name__ == '__main__':` 块里的代码**只有直接运行该文件时才会执行**，被 import 时不会。这是写「既能当脚本跑、又能当模块被导入」代码的标准模式。",
+    },
+    {
+      type: "code",
+      caption: "__name__ 模式",
+      body: "# 文件: greet.py\ndef say_hello(name):\n    return f'Hello, {name}!'\n\n# 直接运行（python greet.py）时执行；被 import 时不执行\nif __name__ == '__main__':\n    # 演示用：直接调用\n    print(say_hello('PyPath'))\n\n# 文件: main.py\n# import greet                  # 不会执行 greet.py 里的 print\n# print(greet.say_hello('Bob'))  # 显式调用才会执行",
+    },
+    {
+      type: "text",
+      body: "## 包（Package）\n\n当模块太多时，把它们放进一个**文件夹**里，就成了**包**。Python 用 `__init__.py` 文件标记一个文件夹是包（Python 3.3+ 允许**命名空间包**，没有 `__init__.py` 也行）。\n\n典型结构：\n\n```\nmy_project/\n├── main.py\n└── my_pkg/                # 包\n    ├── __init__.py        # 标记这是个包（可空）\n    ├── utils.py           # 模块\n    └── models.py          # 模块\n```\n\n导入时：`from my_pkg.utils import helper` 或 `import my_pkg.utils`。",
+    },
+    {
+      type: "code",
+      caption: "包的使用",
+      body: "# 假设项目结构：\n#   my_proj/\n#     main.py\n#     my_pkg/\n#       __init__.py        （空文件）\n#       utils.py           （有 hello() 函数）\n#       models.py\n\n# main.py 中：\n# from my_pkg.utils import hello       # 从包的子模块导入\n# from my_pkg import models            # 整个子模块\n# from my_pkg import hello             # 如果 __init__.py 里写过 from .utils import hello\n\n# import 搜索路径（sys.path）\nimport sys\nprint('第 1 个搜索路径:', sys.path[0])   # 通常是当前目录",
+    },
+    {
+      type: "text",
+      body: "## 标准库 & 第三方库\n\nPython 哲学：「**batteries included**」——标准库非常丰富，开箱即用：\n\n- `os` / `sys`：操作系统、解释器交互。\n- `pathlib`：面向对象的路径。\n- `json` / `csv`：数据序列化。\n- `re`：正则表达式。\n- `datetime`：日期时间。\n- `collections`：高级容器（`Counter`、`defaultdict`、`OrderedDict`）。\n- `itertools` / `functools`：函数式工具。\n- `unittest` / `pytest`：测试。\n\n**第三方库**用 `pip install xxx` 安装，导入方式一样。常见生态：\n- **数据科学**：`numpy`、`pandas`、`matplotlib`。\n- **Web**：`flask`、`fastapi`、`django`。\n- **爬虫**：`requests`、`beautifulsoup4`、`scrapy`。\n- **机器学习**：`scikit-learn`、`pytorch`、`tensorflow`。",
+    },
+    {
+      type: "code",
+      caption: "常用标准库一瞥",
+      body: "import os, sys, json\nimport datetime as dt\nfrom collections import Counter, defaultdict\nfrom pathlib import Path\n\n# os：环境、路径\nprint(os.getcwd())                        # 当前工作目录\nprint(os.environ.get('HOME', '?'))        # 环境变量\n\n# json\ndata = {'name': 'PyPath', 'stars': 5}\nprint(json.dumps(data, ensure_ascii=False))  # {'name': 'PyPath', 'stars': 5}\n\n# datetime\nprint(dt.date.today())                    # 2024-01-01（示例）\n\n# Counter\nwords = 'a b c a b a'.split()\nprint(Counter(words))                     # Counter({'a': 3, 'b': 2, 'c': 1})",
+    },
+    {
+      type: "note",
+      body: "**PEP 8 的导入顺序约定**：① 标准库 → ② 第三方库 → ③ 本项目模块。每组之间空一行。例：`import os\\nimport sys\\n\\nimport numpy as np\\n\\nfrom myproject.utils import helper`。让代码读起来层次分明。",
     },
   ],
   exercises: [
@@ -7414,14 +7790,41 @@ const l16: Lesson = {
   estimatedMinutes: 12,
   content: [
     {
-      type: "code",
-      caption: "读取文件",
-      body: "# 注意：在浏览器中文件 I/O 是受限的，这里用内存中的字符串演示\ntext = '''line 1\nline 2\nline 3'''\n\nfor i, line in enumerate(text.splitlines(), 1):\n    print(f'{i}: {line}')",
+      type: "text",
+      body: "## 文件 I/O 概述\n\n文件 I/O（Input/Output）让程序能把数据**持久化**到磁盘或读取外部数据。Python 内置 `open()` 函数搞定一切，配合 `with` 语句使用最安全。\n\n`open()` 的常用模式：\n\n| 模式 | 含义 | 文件不存在时 |\n|------|------|------------|\n| `'r'` | 默认，读模式 | 报错 |\n| `'w'` | 写模式 | 创建（**会清空**已有内容） |\n| `'a'` | 追加模式 | 创建（保留已有内容） |\n| `'x'` | 独占创建 | 报错（已存在则失败） |\n| `'b'` | 二进制模式 | 配合上面任意模式：`'rb'`、`'wb'` |\n| `'t'` | 文本模式（默认） | — |\n| `'+'` | 读写模式 | 配合其他：`'r+'`、`'w+'` |\n\n⚠️ **核心要点**：`'w'` 会**清空**原文件，重要数据千万别用 `'w'` 打开旧文件！",
     },
     {
       type: "code",
-      caption: "写入字符串",
-      body: "lines = ['first', 'second', 'third']\nbuffer = '\\n'.join(lines)\nprint('Buffer 长度:', len(buffer))\nprint(buffer)",
+      caption: "with 上下文管理器",
+      body: "# 推荐写法：用 with 打开文件\n# 离开 with 块时，文件自动关闭（即使中途报错也保证关闭）\nwith open('demo.txt', 'w', encoding='utf-8') as f:\n    f.write('Hello, world!\\n')\n    f.write('第二行\\n')\n\n# 等价的不推荐写法（要自己 try/finally 关闭）\n# f = open('demo.txt', 'r')\n# try:\n#     content = f.read()\n# finally:\n#     f.close()",
+    },
+    {
+      type: "code",
+      caption: "读取方式",
+      body: "text = '''line 1\nline 2\nline 3'''\n\n# 1. read()：一次读全部\nprint(text.read() if hasattr(text, 'read') else text)\n\n# 2. readline() / readlines()：按行读\n# 由于浏览器中无法真读文件，下面用 splitlines 模拟\nfor i, line in enumerate(text.splitlines(), 1):\n    print(f'{i}: {line}')\n\n# 3. 直接 for 遍历文件对象（最推荐）\n# with open('demo.txt', encoding='utf-8') as f:\n#     for line in f:                # 每次拿到一行\n#         print(line, end='')",
+    },
+    {
+      type: "code",
+      caption: "写入与编码",
+      body: "lines = ['first', 'second', 'third']\nbuffer = '\\n'.join(lines)            # 用 \\n 拼接成多行文本\n\nprint('Buffer 长度:', len(buffer))\nprint(buffer)\n\n# 实际写文件示例：\n# with open('out.txt', 'w', encoding='utf-8') as f:\n#     f.write(buffer)\n#     f.writelines(line + '\\n' for line in lines)\n\n# encoding='utf-8' 强烈建议显式写出，避免平台差异",
+    },
+    {
+      type: "text",
+      body: "## 文本 vs 二进制\n\n- **文本模式**（`'t'`，默认）：读写的是**字符串**（`str`），会做编解码。\n- **二进制模式**（`'b'`）：读写的是**字节**（`bytes`），不做任何编解码。\n\n什么时候用二进制？处理**图片、音频、PDF、可执行文件**等非文本数据时，必须用 `'rb'` / `'wb'`，否则会因编码问题损坏数据。",
+    },
+    {
+      type: "code",
+      caption: "文本与二进制",
+      body: "# 文本模式：读写 str\n# with open('a.txt', 'w', encoding='utf-8') as f:\n#     f.write('hello')                # 写入 str\n\n# 二进制模式：读写 bytes（用于图片/音频等）\n# with open('photo.png', 'rb') as f:\n#     data = f.read()                 # 拿到 bytes 对象\n#     print(type(data))               # <class 'bytes'>\n\n# bytes 字面量：b 前缀 + ASCII 字符\nsample = b'hello'\nprint(type(sample), sample)          # <class 'bytes'> b'hello'",
+    },
+    {
+      type: "code",
+      caption: "pathlib：面向对象的路径",
+      body: "from pathlib import Path\n\n# Path 比 os.path 更好用\np = Path('data') / 'sub' / 'file.txt'\nprint('路径:', p)\nprint('父目录:', p.parent)\nprint('文件名:', p.name)\nprint('后缀:', p.suffix)\n\n# 读文件\n# text = p.read_text(encoding='utf-8')\n# 写文件\n# p.write_text('content', encoding='utf-8')\n\n# 列出某目录下所有 .py 文件\n# for f in Path('src').glob('*.py'):\n#     print(f)",
+    },
+    {
+      type: "note",
+      body: "**为什么要用 `with`？** 操作系统对**同时打开的文件数**有限制。如果只用 `open()` 不关闭，文件句柄会泄漏，程序跑久了会出问题。`with` 是**上下文管理器**协议，能保证资源在任何情况下都被释放——这是 Python 写资源处理代码的通用模式。",
     },
   ],
   exercises: [
@@ -7946,9 +8349,39 @@ const l17: Lesson = {
   estimatedMinutes: 10,
   content: [
     {
+      type: "text",
+      body: "## 什么是异常？\n\n程序运行时遇到的**错误**叫「异常（exception）」。如果不处理，程序会**崩溃**并打印 traceback。\n\n常见内置异常：\n\n| 异常 | 触发场景 |\n|------|---------|\n| `ZeroDivisionError` | 除数为 0 |\n| `IndexError` | 列表/元组下标越界 |\n| `KeyError` | 字典访问不存在的 key |\n| `TypeError` | 类型不匹配（如 `1 + 'a'`） |\n| `ValueError` | 值类型对，但值不合法（如 `int('abc')`） |\n| `FileNotFoundError` | 文件不存在 |\n| `AttributeError` | 对象没有这个属性 |\n| `ImportError` / `ModuleNotFoundError` | 导入模块失败 |\n\n所有异常都继承自 `BaseException`，常见基类是 `Exception`。",
+    },
+    {
+      type: "text",
+      body: "## try / except / else / finally\n\nPython 用 `try ... except ...` 捕获并处理异常。完整结构：\n\n```python\ntry:\n    可能出错的代码\nexcept SomeError as e:\n    发生 SomeError 时执行\nexcept (TypeError, ValueError):     # 多个异常打包处理\n    ...\nexcept Exception as e:               # 兜底：捕获大部分异常\n    ...\nelse:\n    try 块**没有**异常时执行\nfinally:\n    **无论**有没有异常都执行（清理资源）\n```\n\n⚠️ **顺序很重要**：必须**从具体到宽泛**——先 `except ValueError`，再 `except Exception`，否则具体异常永远捕获不到。",
+    },
+    {
       type: "code",
-      caption: "异常处理",
-      body: "def safe_div(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError:\n        return '不能除以 0'\n    except TypeError:\n        return '类型错误'\n    finally:\n        print('done')\n\nprint(safe_div(10, 0))",
+      caption: "try/except/else/finally",
+      body: "def safe_div(a, b):\n    try:\n        result = a / b\n    except ZeroDivisionError as e:\n        # 只处理除零，其它异常继续向上抛\n        return f'不能除以 0 ({e})'\n    except TypeError:\n        return '类型错误：请传数字'\n    else:\n        # try 成功时执行\n        print('  计算成功')\n        return result\n    finally:\n        # 无论如何都执行：常用于释放资源\n        print('  done')\n\nprint(safe_div(10, 2))    # 计算成功 / 5.0 / done\nprint(safe_div(10, 0))    # 不能除以 0 (division by zero) / done",
+    },
+    {
+      type: "text",
+      body: "## 主动抛异常：raise\n\n有时候你**主动**要抛异常：参数不合法、状态不对、业务规则违反。用 `raise` 把异常扔出去，让调用方处理。\n\n```python\ndef set_age(age):\n    if age < 0:\n        raise ValueError('年龄不能为负')\n```\n\n也可以**原样**重新抛正在处理的异常：`raise`（不写具体异常名）。这样能先记录日志，再把异常传给上层。",
+    },
+    {
+      type: "code",
+      caption: "raise 主动抛异常",
+      body: "def set_age(age):\n    if not isinstance(age, int):\n        raise TypeError('年龄必须是整数')\n    if age < 0 or age > 150:\n        raise ValueError(f'年龄越界: {age}')\n    return age\n\n# 正常\nprint(set_age(25))             # 25\n\n# 抛异常\ntry:\n    set_age(-1)\nexcept ValueError as e:\n    print('捕获到 ValueError:', e)\n\n# 自定义异常：继承 Exception 或其子类\nclass TooTiredError(Exception):\n    pass\n\nraise TooTiredError('今天打太多游戏了')",
+    },
+    {
+      type: "text",
+      body: "## 自定义异常与最佳实践\n\n业务上需要区分不同的错误类型时，可以定义自己的异常类——继承 `Exception`（或更具体的子类）即可。\n\n异常处理的最佳实践：\n1. **只捕获你能处理的**——别无脑 `except:` 吞掉所有异常。\n2. **不要用异常做正常控制流**——异常比 `if` 慢几个数量级。\n3. **记录上下文**——`except` 里最好 `print` 或 `log` 出错信息。\n4. **资源清理用 `finally` 或 `with`**——别让文件/网络连接泄漏。",
+    },
+    {
+      type: "code",
+      caption: "自定义异常 + 业务示例",
+      body: "class InsufficientFundsError(Exception):\n    \"\"\"余额不足\"\"\"\n    pass\n\nclass BankAccount:\n    def __init__(self, balance=0):\n        self.balance = balance\n\n    def withdraw(self, amount):\n        if amount <= 0:\n            raise ValueError('取款金额必须为正')\n        if amount > self.balance:\n            # 抛自定义异常，把关键信息传出去\n            raise InsufficientFundsError(\n                f'余额 {self.balance}，无法取 {amount}'\n            )\n        self.balance -= amount\n        return amount\n\nacc = BankAccount(100)\ntry:\n    acc.withdraw(200)\nexcept InsufficientFundsError as e:\n    print('交易失败:', e)",
+    },
+    {
+      type: "note",
+      body: "**EAFP vs LBYL**：Python 风格是 **EAFP（Easier to Ask Forgiveness than Permission）**——「先做了再说，错了再处理」，对应 `try/except`。对比 **LBYL（Look Before You Leap）**——「先看好了再跳」，对应 `if` 检查。在 Python 里 EAFP 通常更地道、也更快。",
     },
   ],
   exercises: [
@@ -8475,9 +8908,44 @@ const l18: Lesson = {
   estimatedMinutes: 9,
   content: [
     {
+      type: "text",
+      body: "## 日期时间：datetime 与 time\n\nPython 处理时间的标准库有两个：\n\n- **`datetime`**：面向对象，表示日期/时间/时间差。**推荐日常使用**。\n- **`time`**：偏底层，主要和 Unix 时间戳打交道。\n\n`datetime` 模块的 4 个核心类：\n\n| 类 | 表示 | 例子 |\n|---|------|------|\n| `date` | 日期（年月日） | `date(2024, 1, 1)` |\n| `time` | 时间（时分秒） | `time(13, 30, 0)` |\n| `datetime` | 日期 + 时间 | `datetime(2024, 1, 1, 13, 30, 0)` |\n| `timedelta` | 时间间隔 | `timedelta(days=1, hours=2)` |",
+    },
+    {
       type: "code",
-      caption: "日期时间",
-      body: "from datetime import datetime, timedelta\n\nnow = datetime.now()\nprint('现在:', now.strftime('%Y-%m-%d %H:%M:%S'))\n\ntomorrow = now + timedelta(days=1)\nprint('明天:', tomorrow.strftime('%Y-%m-%d'))",
+      caption: "datetime 基础",
+      body: "from datetime import datetime, date, time, timedelta\n\n# 获取「现在」\nnow = datetime.now()\nprint('现在:', now)                              # 2024-... 当前本地时间\nprint('UTC 现在:', datetime.utcnow())             # UTC 时间（3.12 起被弃用，建议用 timezone）\n\n# 取各部分\nprint('年:', now.year, '月:', now.month, '日:', now.day)\nprint('时:', now.hour, '分:', now.minute, '秒:', now.second)\n\n# 构造指定时间\nd = datetime(2024, 1, 1, 13, 30, 0)\nprint('指定时间:', d)",
+    },
+    {
+      type: "text",
+      body: "## 时间差：timedelta\n\n`timedelta` 表示「两个时间点之间的差」，支持 `days`、`seconds`、`microseconds`、`weeks` 等参数。\n\n- `datetime + timedelta` → 新的 `datetime`。\n- `datetime - datetime` → `timedelta`（差值）。",
+    },
+    {
+      type: "code",
+      caption: "timedelta 时间差",
+      body: "from datetime import datetime, timedelta\n\nnow = datetime.now()\nprint('现在:', now.strftime('%Y-%m-%d %H:%M:%S'))\n\n# 加上时间差：明天 / 一周后 / 1 小时前\ntomorrow = now + timedelta(days=1)\nnext_week = now + timedelta(weeks=1)\none_hour_ago = now - timedelta(hours=1)\nprint('明天:', tomorrow.strftime('%Y-%m-%d'))\nprint('一周后:', next_week.strftime('%Y-%m-%d'))\nprint('1 小时前:', one_hour_ago.strftime('%H:%M:%S'))\n\n# 时间差相减：得到 timedelta\ndiff = tomorrow - now\nprint('差值天数:', diff.days, '总秒数:', diff.total_seconds())",
+    },
+    {
+      type: "text",
+      body: "## 格式化与解析\n\n- **`strftime(fmt)`**：`datetime → 字符串`。\n- **`strptime(s, fmt)`**：`字符串 → datetime`（注意：是**类方法**，用类名调用）。\n\n常用格式符：\n\n| 格式符 | 含义 | 例子 |\n|--------|------|------|\n| `%Y` | 4 位年份 | `2024` |\n| `%m` | 月份（01-12） | `01` |\n| `%d` | 日（01-31） | `09` |\n| `%H` | 24h 制小时 | `13` |\n| `%M` | 分钟 | `30` |\n| `%S` | 秒 | `45` |\n| `%A` | 星期全称 | `Monday` |\n| `%B` | 月份全称 | `January` |",
+    },
+    {
+      type: "code",
+      caption: "strftime / strptime",
+      body: "from datetime import datetime\n\nnow = datetime.now()\n\n# datetime -> 字符串\nprint(now.strftime('%Y-%m-%d'))            # 2024-01-09\nprint(now.strftime('%H:%M:%S'))            # 13:30:45\nprint(now.strftime('%Y/%m/%d %A'))         # 2024/01/09 Monday\n\n# 字符串 -> datetime（注意 strptime 是类方法）\ns = '2024-01-09 13:30:45'\ndt = datetime.strptime(s, '%Y-%m-%d %H:%M:%S')\nprint('解析后:', dt, type(dt).__name__)\n\n# ISO 格式：与 JSON / 数据库常用\nprint(now.isoformat())                    # 2024-01-09T13:30:45.123456",
+    },
+    {
+      type: "text",
+      body: "## 时间戳与时区\n\n- **时间戳（timestamp）**：从 1970-01-01 00:00:00 UTC 起经过的秒数。`datetime.timestamp()` 得到。\n- **时区（timezone）**：`datetime` 默认是**无时区（naive）** 的。处理多时区数据时要用带 `tzinfo` 的「aware」对象。\n\n```python\nfrom datetime import datetime, timezone, timedelta\nbeijing = timezone(timedelta(hours=8))\nnow = datetime.now(beijing)\n```",
+    },
+    {
+      type: "code",
+      caption: "时间戳与时区",
+      body: "from datetime import datetime, timezone, timedelta\n\n# 当前时间戳\nnow = datetime.now()\nts = now.timestamp()\nprint('时间戳:', ts)\nprint('转回 datetime:', datetime.fromtimestamp(ts))\n\n# 带时区的时间\nutc = datetime.now(timezone.utc)\nprint('UTC:', utc)\n\nbeijing = timezone(timedelta(hours=8))    # 北京 = UTC+8\nnow_bj = datetime.now(beijing)\nprint('北京时间:', now_bj)\n\n# 不同时区转 UTC\nprint('转 UTC:', now_bj.astimezone(timezone.utc))",
+    },
+    {
+      type: "note",
+      body: "**最佳实践**：内部统一用 **UTC 时间戳**（整数）存储和计算，只在**展示给用户**的时候再转成当地时区。直接用本地 `datetime` 容易在跨时区、跨夏令时的时候踩坑。",
     },
   ],
   exercises: [
@@ -9002,9 +9470,44 @@ const l19: Lesson = {
   estimatedMinutes: 8,
   content: [
     {
+      type: "text",
+      body: "## 什么是 JSON？\n\n**JSON（JavaScript Object Notation）** 是目前最主流的**数据交换格式**：\n- Web API 返回的数据（几乎都是 JSON）。\n- 配置文件（如 `package.json`、`tsconfig.json`）。\n- 前后端、微服务之间的通信「语言」。\n\nJSON 语法简单：\n\n```json\n{\n  \"name\": \"PyPath\",\n  \"stars\": 5,\n  \"tags\": [\"python\", \"learn\"],\n  \"author\": null\n}\n```\n\n支持 6 种类型：对象 `{}`、数组 `[]`、字符串 `\"...\"`、数字、布尔 `true/false`、`null`。",
+    },
+    {
+      type: "text",
+      body: "## Python ↔ JSON\n\nPython 用 `json` 模块互转：\n\n| JSON | Python |\n|------|--------|\n| object `{}` | `dict` |\n| array `[]` | `list` |\n| string `\"...\"` | `str` |\n| number | `int` / `float` |\n| `true` / `false` | `True` / `False` |\n| `null` | `None` |\n\n4 个核心函数：\n\n| 函数 | 作用 |\n|------|------|\n| `json.dumps(obj)` | 对象 → JSON **字符串** |\n| `json.loads(s)` | JSON 字符串 → 对象 |\n| `json.dump(obj, file)` | 对象 → JSON **文件** |\n| `json.load(file)` | JSON 文件 → 对象 |\n\n记忆：**带 `s` 的处理字符串，不带 `s` 的处理文件**。",
+    },
+    {
       type: "code",
-      caption: "JSON 编解码",
-      body: "import json\n\ndata = {'name': 'PyPath', 'stars': 5, 'tags': ['python', 'learn']}\ns = json.dumps(data, ensure_ascii=False, indent=2)\nprint(s)\n\nback = json.loads(s)\nprint('name:', back['name'])",
+      caption: "dumps / loads",
+      body: "import json\n\ndata = {'name': 'PyPath', 'stars': 5, 'tags': ['python', 'learn']}\n\n# Python -> JSON 字符串\ns = json.dumps(data, ensure_ascii=False, indent=2)\nprint(s)\n# {\n#   \"name\": \"PyPath\",\n#   \"stars\": 5,\n#   \"tags\": [\n#     \"python\",\n#     \"learn\"\n#   ]\n# }\n\n# JSON 字符串 -> Python\nback = json.loads(s)\nprint('name:', back['name'])             # PyPath\nprint('类型:', type(back).__name__)      # dict",
+    },
+    {
+      type: "code",
+      caption: "dump / load 文件读写",
+      body: "import json\n\ndata = {\n    'users': [\n        {'name': 'Alice', 'age': 28},\n        {'name': 'Bob',   'age': 30},\n    ]\n}\n\n# 写 JSON 文件（dump）\n# with open('data.json', 'w', encoding='utf-8') as f:\n#     json.dump(data, f, ensure_ascii=False, indent=2)\n\n# 读 JSON 文件（load）\n# with open('data.json', 'r', encoding='utf-8') as f:\n#     loaded = json.load(f)\n#     print(loaded['users'][0]['name'])  # Alice\n\n# 演示：用内存里的字符串假装文件\nfake_file = json.dumps(data, ensure_ascii=False)\nprint('序列化结果:', fake_file[:60], '...')",
+    },
+    {
+      type: "text",
+      body: "## dumps 的常用参数\n\n- **`ensure_ascii=False`**：让中文不变成 `\\uXXXX`，**几乎总是应该写**。\n- **`indent=N`**：缩进美化，N 是空格数。`indent=2` / `indent=4` 是常见值。\n- **`sort_keys=True`**：按键名字母序输出（调试 / 生成稳定 diff 时有用）。\n- **`separators=(',', ':')`**：去掉多余空格，让 JSON 更紧凑（网络传输用）。\n- **`default=str`**：遇到不能序列化的对象（如 `datetime`）时调用 `str()` 转换。",
+    },
+    {
+      type: "code",
+      caption: "dumps 参数精调",
+      body: "import json\nfrom datetime import datetime\n\ndata = {'b': 1, 'a': 2, 'time': datetime.now()}\n\n# ensure_ascii=False 让中文保留\nprint(json.dumps({'name': '中文'}, ensure_ascii=False))    # {\"name\": \"中文\"}\nprint(json.dumps({'name': '中文'}))                        # {\"name\": \"\\\\u4E2D\\\\u6587\"}\n\n# indent 美化输出\nprint(json.dumps(data, indent=2))\n\n# sort_keys 按键排序\nprint(json.dumps({'b': 1, 'a': 2}, sort_keys=True))       # {\"a\": 2, \"b\": 1}\n\n# default 兜底：不能序列化的对象转 str\nprint(json.dumps(data, default=str))",
+    },
+    {
+      type: "text",
+      body: "## 处理自定义对象\n\n`json` 模块**默认不能**序列化 `datetime`、自定义类的实例等。需要：\n1. 把对象先转成 `dict` / 基本类型；\n2. 或者给 `dumps` 传 `default` 参数。\n\n反过来，反序列化时想让 JSON 字典变回自定义类，要传 `object_hook`。",
+    },
+    {
+      type: "code",
+      caption: "自定义对象编解码",
+      body: "import json\nfrom datetime import datetime\n\nclass User:\n    def __init__(self, name, age):\n        self.name = name\n        self.age = age\n    def __repr__(self):\n        return f'User({self.name}, {self.age})'\n\nu = User('Alice', 28)\n\n# 序列化：default 把对象转 dict\ns = json.dumps(u, default=lambda obj: obj.__dict__, ensure_ascii=False)\nprint('序列化:', s)                  # {\"name\": \"Alice\", \"age\": 28}\n\n# 反序列化：object_hook 把 dict 还原成对象\nback = json.loads(s, object_hook=lambda d: User(**d))\nprint('反序列化:', back)              # User(Alice, 28)",
+    },
+    {
+      type: "note",
+      body: "**安全提醒**：`json.loads` 本身是安全的（不执行代码），但**千万别**用 `eval()` 解析「JSON」字符串——`eval` 会执行任意 Python 代码，极易被攻击。`yaml.load`（不带 `Loader=SafeLoader`）也是同理。永远只用 `json.loads`。",
     },
   ],
   exercises: [
@@ -9523,9 +10026,44 @@ const l20: Lesson = {
   estimatedMinutes: 13,
   content: [
     {
+      type: "text",
+      body: "## 什么是正则表达式？\n\n**正则表达式（regular expression，简称 regex）** 是用一串「特殊字符」描述**文本模式**的语言。它能做：\n\n- **查找**：从文本里找符合模式的内容（如「找所有邮箱」）。\n- **校验**：检查字符串是否符合规则（如「是不是合法手机号」）。\n- **提取**：从文本中抽取感兴趣的部分。\n- **替换**：把符合模式的内容替换成别的。\n\nPython 内置 `re` 模块支持正则。**正则很难一次记住**，但**常用子集**很值得学。",
+    },
+    {
+      type: "text",
+      body: "## 元字符速查\n\n| 符号 | 含义 | 例子 |\n|------|------|------|\n| `.` | 任意单个字符（除换行） | `a.c` 匹配 `abc` / `a1c` |\n| `^` | 行首 | `^Hi` 匹配 `Hi...` |\n| `$` | 行尾 | `end$` 匹配 `...end` |\n| `*` | 前一个重复 0+ 次 | `ab*` 匹配 `a` / `ab` / `abb` |\n| `+` | 前一个重复 1+ 次 | `ab+` 匹配 `ab` / `abb`（不匹配 `a`） |\n| `?` | 前一个 0 或 1 次 | `colou?r` 匹配 `color` / `colour` |\n| `{m,n}` | 前一个 m~n 次 | `a{2,4}` 匹配 `aa` / `aaa` / `aaaa` |\n| `[abc]` | 字符类，a 或 b 或 c | `[Pp]y` 匹配 `py` / `Py` |\n| `[^abc]` | 取反：除 a/b/c 外 | `[^0-9]` 匹配非数字 |\n| `\\d` / `\\D` | 数字 / 非数字 | 等价 `[0-9]` / `[^0-9]` |\n| `\\w` / `\\W` | 单词字符 / 非单词 | 等价 `[A-Za-z0-9_]` |\n| `\\s` / `\\S` | 空白 / 非空白 | 空格、Tab、换行 |\n| `(...)` | 分组 | `(ab)+` 匹配 `ababab` |\n| `\\|` | 或 | `cat\\|dog` 匹配 `cat` 或 `dog` |\n| `\\` | 转义 | `\\.` 匹配真正的点号 |",
+    },
+    {
       type: "code",
-      caption: "正则基础",
-      body: "import re\n\ntext = '今天 2026-07-07 天气晴朗'\nmatch = re.search(r'\\d{4}-\\d{2}-\\d{2}', text)\nprint('找到日期:', match.group())\n\nemails = 'a@b.com, c@d.io'\nprint(re.findall(r'[\\w.]+@[\\w.]+', emails))",
+      caption: "re 模块基础",
+      body: "import re\n\ntext = '今天 2026-07-07 天气晴朗，明天 2026-07-08 有雨'\n\n# re.search：找第一个匹配\nm = re.search(r'\\d{4}-\\d{2}-\\d{2}', text)\nprint('第一个日期:', m.group())        # 2026-07-07\n\n# re.findall：找所有匹配，返回列表\ndates = re.findall(r'\\d{4}-\\d{2}-\\d{2}', text)\nprint('所有日期:', dates)              # ['2026-07-07', '2026-07-08']\n\n# 提取邮箱\nemails = '联系我 a@b.com 或 c@d.io'\nprint(re.findall(r'[\\w.]+@[\\w.]+', emails))   # ['a@b.com', 'c@d.io']",
+    },
+    {
+      type: "text",
+      body: "## re 模块的 4 个核心函数\n\n| 函数 | 作用 | 返回值 |\n|------|------|--------|\n| `re.search(pattern, s)` | 在 s 中找**第一个**匹配 | `Match` 对象或 `None` |\n| `re.match(pattern, s)` | 在 s **开头**匹配 | `Match` 对象或 `None` |\n| `re.findall(pattern, s)` | 找**所有**匹配 | 字符串列表 |\n| `re.finditer(pattern, s)` | 找所有匹配 | 迭代 `Match` 对象 |\n| `re.sub(pattern, repl, s)` | 替换 | 替换后的字符串 |\n| `re.split(pattern, s)` | 按模式切分 | 列表 |\n\n`Match` 对象常用方法：\n- `m.group()`：整个匹配。\n- `m.group(1)`：第 1 个分组。\n- `m.groups()`：所有分组。\n- `m.start()` / `m.end()`：起止位置。",
+    },
+    {
+      type: "code",
+      caption: "match / groups / sub / split",
+      body: "import re\n\n# 1. re.match：只在开头匹配\nprint(re.match(r'\\d+', '123abc'))     # 匹配 <re.Match>\nprint(re.match(r'\\d+', 'abc123'))     # None （不在开头）\n\n# 2. 分组：把年月日分别取出\nm = re.search(r'(\\d{4})-(\\d{2})-(\\d{2})', '日期: 2026-07-08')\nprint('整体:', m.group())              # 2026-07-08\nprint('年:', m.group(1))               # 2026\nprint('月:', m.group(2))               # 07\nprint('日:', m.group(3))               # 08\n\n# 3. 命名分组：(?P<name>...)\nm = re.search(r'(?P<y>\\d{4})-(?P<m>\\d{2})', '2026-07')\nprint(m.group('y'), m.group('m'))      # 2026 07\n\n# 4. sub 替换：把手机号中间 4 位隐去\nphone = '电话: 13812345678'\nprint(re.sub(r'(\\d{3})\\d{4}(\\d{4})', r'\\1****\\2', phone))   # 电话: 138****5678\n\n# 5. split 按模式切分\nprint(re.split(r'[,;\\s]+', 'a, b; c  d'))   # ['a', 'b', 'c', 'd']",
+    },
+    {
+      type: "text",
+      body: "## 贪婪 vs 非贪婪\n\n默认 `*` `+` `?` `{m,n}` 都是**贪婪**的——尽可能多地匹配。加 `?` 变成**非贪婪**——尽可能少地匹配。\n\n```python\nre.findall(r'<.+>', '<a><b>')     # 贪婪：['<a><b>']\nre.findall(r'<.+?>', '<a><b>')    # 非贪婪：['<a>', '<b>']\n```\n\n非贪婪常见使用场景：HTML/XML 标签匹配、提取最短内容。",
+    },
+    {
+      type: "code",
+      caption: "贪婪与非贪婪",
+      body: "import re\n\nhtml = '<div>第一段</div><div>第二段</div>'\n\n# 贪婪：会一口气吃到底\ngreedy = re.findall(r'<div>.+</div>', html)\nprint('贪婪:', greedy)              # ['<div>第一段</div><div>第二段</div>']\n\n# 非贪婪：每个 div 单独匹配\nlazy = re.findall(r'<div>.+?</div>', html)\nprint('非贪婪:', lazy)              # ['<div>第一段</div>', '<div>第二段</div>']",
+    },
+    {
+      type: "code",
+      caption: "实用模式：手机号 / 邮箱 / URL",
+      body: "import re\n\n# 手机号（中国大陆 11 位，1 开头）\nphone_re = re.compile(r'^1[3-9]\\d{9}$')\nprint(phone_re.match('13812345678'))    # 匹配\nprint(phone_re.match('2381234567'))     # None\n\n# 邮箱（简化版）\nemail_re = re.compile(r'[\\w.+-]+@[\\w.-]+\\.\\w+')\nprint(email_re.findall('联系我 alice@example.com 或 bob@foo.io'))\n\n# URL（简化）\nurl_re = re.compile(r'https?://[\\w.-]+(?:/[\\w./?=&%-]*)?')\nprint(url_re.findall('访问 https://example.com/path?q=1 或 http://foo.bar'))",
+    },
+    {
+      type: "note",
+      body: "**性能小贴士**：\n- 用 **`re.compile(pattern)` 预编译**模式，如果模式要重复使用，**能快 5~10 倍**。\n- 写**精确字符类** `\\d` 比 `.` 更快。\n- 能用字符串方法（`startswith`、`endswith`、`in`）就别用正则。\n- 复杂正则先用 https://regex101.com 测试。",
     },
   ],
   exercises: [
@@ -10050,12 +10588,29 @@ const l21: Lesson = {
   content: [
     {
       type: "text",
-      body: "## 项目目标\n\n程序随机生成 1-100 的数字，玩家通过提示不断猜对。",
+      body: "## 项目目标\n\n做一个**猜数字**小游戏：\n\n1. 程序**随机**生成 1~100 之间的一个整数作为答案。\n2. 玩家**循环**输入猜测的数字。\n3. 程序给出「太大 / 太小」的**提示**。\n4. 猜中后显示**用了几次**并结束游戏。\n\n这个项目是**前 4 节课**（输入、循环、条件、函数）的综合实战，能让你把学过的零碎知识串起来。",
+    },
+    {
+      type: "text",
+      body: "## 涉及的知识点\n\n- **`random.randint(a, b)`**：生成 `[a, b]` 闭区间的随机整数。\n- **`input(prompt)`**：从控制台读取一行输入，**返回值是字符串**，需要 `int()` 转换。\n- **`while` 循环 + `break`**：游戏主循环，猜中后退出。\n- **`if / elif / else`**：三种情况——偏大、偏小、相等。\n- **`f-string`**：把变量嵌入提示语。\n- **异常处理**：玩家可能输入非数字，用 `try/except` 兜底。",
     },
     {
       type: "code",
       caption: "核心逻辑（浏览器版）",
-      body: "import random\n\ntarget = random.randint(1, 100)\nattempts = 0\n# 模拟 3 次猜测\nfor guess in [50, 75, 63]:\n    attempts += 1\n    if guess < target:\n        print(f'{guess} 太小了')\n    elif guess > target:\n        print(f'{guess} 太大了')\n    else:\n        print(f'Bingo! 用 {attempts} 次猜中')\n        break",
+      body: "import random\n\ntarget = random.randint(1, 100)    # 答案：1~100 之间的随机整数\nattempts = 0                        # 玩家已猜的次数\n\n# 模拟 3 次猜测（真实程序里用 input + while 循环）\nfor guess in [50, 75, 63]:\n    attempts += 1                    # 计数 +1\n    if guess < target:              # 偏小\n        print(f'{guess} 太小了')\n    elif guess > target:            # 偏大\n        print(f'{guess} 太大了')\n    else:                           # 命中\n        print(f'Bingo! 用 {attempts} 次猜中')\n        break                        # 跳出循环，游戏结束",
+    },
+    {
+      type: "code",
+      caption: "完整版（带 input 和异常处理）",
+      body: "import random\n\n# 真正的可运行版本（用 input 替换上面循环中的硬编码列表）\ntarget = random.randint(1, 100)\nattempts = 0\nprint('我已经想好一个 1~100 的数字，猜猜看！')\n\nwhile True:\n    raw = input('请输入你的猜测: ')\n    try:\n        guess = int(raw)             # 把字符串转整数\n    except ValueError:\n        print('请输入一个整数！')\n        continue                     # 跳过本轮，重新输入\n\n    attempts += 1\n    if guess < target:\n        print(f'{guess} 太小了')\n    elif guess > target:\n        print(f'{guess} 太大了')\n    else:\n        print(f'Bingo! 答案是 {target}，你用了 {attempts} 次')\n        break\n\n# 进阶挑战：\n# 1. 限制最大尝试次数（10 次机会）\n# 2. 记录最佳成绩\n# 3. 让玩家选择难度（数字范围）",
+    },
+    {
+      type: "text",
+      body: "## 二分法小知识\n\n猜数字最优策略是**二分查找**：每次猜中点。100 个数字最多 **7 次**（`log2(100) ≈ 6.64`）就一定能猜中！\n\n```\n第 1 次猜 50 → 排除一半\n第 2 次猜 25 或 75 → 再排除一半\n...\n第 7 次必定命中\n```\n\n这是「分治思想」最直观的体现——把搜索空间不断折半。",
+    },
+    {
+      type: "note",
+      body: "**`input()` 的坑**：`input()` **永远返回字符串**，哪怕玩家输入 `42`，你拿到的也是 `'42'`。所以比较前必须 `int(input())` 转换。如果用户输入了非数字，`int()` 会抛 `ValueError`，用 `try/except` 处理即可（参考上面「完整版」代码）。",
     },
   ],
   exercises: [
@@ -10582,9 +11137,35 @@ const l22: Lesson = {
   estimatedMinutes: 12,
   content: [
     {
+      type: "text",
+      body: "## 项目目标\n\n实现一个支持**加、减、乘、除**的简易计算器，关键学习点：\n\n- 用**函数**把操作组织起来。\n- 用**字典 + lambda**做运算符映射（替代 `if/elif` 长链）。\n- 用**异常处理**应对除零、非法输入。",
+    },
+    {
+      type: "text",
+      body: "## 涉及的知识点\n\n- **函数定义** `def`、**参数**、**返回值**。\n- **字典** `{key: value}`，把运算符映射到对应函数。\n- **`lambda`**：单行匿名函数，适合做字典 value。\n- **三元表达式** `x if cond else y`：在 lambda 里写条件分支。\n- **try / except / ZeroDivisionError**：异常处理。\n- **类型转换** `int()` / `float()`：处理用户输入。",
+    },
+    {
       type: "code",
-      caption: "计算器",
-      body: "def calc(a, op, b):\n    ops = {'+': lambda x, y: x + y,\n           '-': lambda x, y: x - y,\n           '*': lambda x, y: x * y,\n           '/': lambda x, y: x / y if y != 0 else None}\n    if op not in ops:\n        return '不支持的运算符'\n    return ops[op](a, b)\n\nprint(calc(10, '+', 5))\nprint(calc(10, '/', 0))",
+      caption: "字典映射版计算器",
+      body: "def calc(a, op, b):\n    \"\"\"用字典把运算符映射到 lambda，比一连串 if/elif 干净。\"\"\"\n    # 每个 value 是一个接收 (x, y) 返回结果的 lambda\n    ops = {\n        '+': lambda x, y: x + y,\n        '-': lambda x, y: x - y,\n        '*': lambda x, y: x * y,\n        # 三元表达式：y != 0 时除，否则返回 None\n        '/': lambda x, y: x / y if y != 0 else None,\n    }\n    if op not in ops:\n        return '不支持的运算符'\n    return ops[op](a, b)\n\nprint(calc(10, '+', 5))            # 15\nprint(calc(10, '/', 0))            # None\nprint(calc(10, '%', 3))            # 不支持的运算符",
+    },
+    {
+      type: "code",
+      caption: "异常处理版（更安全）",
+      body: "def calc(a, op, b):\n    ops = {\n        '+': lambda x, y: x + y,\n        '-': lambda x, y: x - y,\n        '*': lambda x, y: x * y,\n        '/': lambda x, y: x / y,\n    }\n    if op not in ops:\n        raise ValueError(f'不支持的运算符: {op}')\n    try:\n        # 把数字字符串转成 float，支持小数\n        x, y = float(a), float(b)\n        return ops[op](x, y)\n    except ZeroDivisionError:\n        return '除数不能为 0'\n    except ValueError as e:\n        return f'输入错误: {e}'\n\nprint(calc(10, '+', 5))            # 15.0\nprint(calc(10, '/', 0))            # 除数不能为 0\nprint(calc(10, '%', 3))            # 输入错误: 不支持的运算符: %",
+    },
+    {
+      type: "code",
+      caption: "用 input 实现交互版",
+      body: "# 交互式版本（命令行运行）\n# try:\n#     a = input('第一个数字: ')\n#     op = input('运算符 (+-*/): ')\n#     b = input('第二个数字: ')\n#     result = calc(a, op, b)\n#     print('结果:', result)\n# except Exception as e:\n#     print('出错了:', e)\n\n# 进阶扩展：\n# - 支持更多运算：%(取模)、**(幂)、//(整除)\n# - 连续运算：把上一步结果作为下一步输入\n# - 解析表达式：1 + 2 * 3（注意运算符优先级）",
+    },
+    {
+      type: "text",
+      body: "## 字典映射 vs if/elif 链\n\n为什么用字典 + lambda 而不是 `if/elif`？\n\n| 写法 | 优点 | 缺点 |\n|------|------|------|\n| `if/elif` 链 | 直观、易理解 | 运算符多了就啰嗦 |\n| **字典 + lambda** | 加新运算只改 dict 即可，**易扩展** | 复杂运算 lambda 写不下 |\n\n实际项目里，更常见的做法是**字典 value 存函数名**（而不是 lambda）：\n\n```python\nimport operator\nops = {'+': operator.add, '-': operator.sub, '*': operator.mul, '/': operator.truediv}\n```\n\n`operator` 模块提供了所有运算符的**函数版本**，既可读又可调用。",
+    },
+    {
+      type: "note",
+      body: "**`eval` 的诱惑与风险**：有人会想用 `eval('1 + 2')` 直接求值字符串。`eval` **会执行任意 Python 代码**，所以**永远不要**用 `eval` 解析用户输入——这是巨大的安全漏洞。永远用 `int()` / `float()` 显式转换 + `try/except` 兜底。",
     },
   ],
   exercises: [
@@ -11107,13 +11688,39 @@ const l23: Lesson = {
   order: 3,
   title: "Todo List CLI",
   subtitle: "数据结构的实际应用",
-  description: "用列表 + 字典管理待办。",
+  description: "用列表 + 字典管理待办，掌握 CLI 主循环与持久化。",
   estimatedMinutes: 14,
   content: [
     {
+      type: "text",
+      body: "## 项目目标\n\n做一个**命令行 Todo List**（待办事项）管理器，关键学习点：\n\n- 用**列表 + 字典**的组合存储多条任务。\n- 用**函数**组织增删改查（CRUD）操作。\n- 用 `while True` 写**主循环**，用 `if/elif` 路由命令。\n- 用 `json` 模块把数据**保存到文件**，下次启动自动恢复。\n\n这是把前面学过的「列表、字典、函数、循环、条件、文件 I/O、JSON」**全部串起来**的项目。",
+    },
+    {
+      type: "text",
+      body: "## 涉及的知识点\n\n- **列表** `list`：存所有任务，每个元素是一个字典。\n- **字典** `dict`：用 `{'task': ..., 'done': False}` 描述单条任务。\n- **enumerate()**：遍历列表时同时拿到索引和元素。\n- **append() / pop() / remove()**：列表的增删操作。\n- **while True + break**：CLI 主循环的标准写法。\n- **input().strip()**：读用户输入并去掉首尾空白。\n- **try/except**：处理 `json` 解析错误、文件不存在等异常。\n- **json.dump / json.load**：把列表写入文件 / 从文件读回。",
+    },
+    {
       type: "code",
-      caption: "待办管理",
-      body: "todos = []\n\ndef add(task):\n    todos.append({'task': task, 'done': False})\n\ndef complete(index):\n    if 0 <= index < len(todos):\n        todos[index]['done'] = True\n\ndef show():\n    for i, t in enumerate(todos):\n        mark = '✓' if t['done'] else '○'\n        print(f'{i} {mark} {t[\"task\"]}')\n\nadd('学习 Python 基础')\nadd('完成项目作品')\ncomplete(0)\nshow()",
+      caption: "内存版 Todo（最简版）",
+      body: "# 列表里每个元素是一个字典，描述一条任务\ntodos = []\n\ndef add(task: str) -> None:\n    \"\"\"添加一条任务，初始 done=False 表示未完成。\"\"\"\n    todos.append({'task': task, 'done': False})\n\ndef complete(index: int) -> None:\n    \"\"\"把第 index 条标记为已完成。\"\"\"\n    if 0 <= index < len(todos):  # 防御性检查：索引是否合法\n        todos[index]['done'] = True\n\ndef show() -> None:\n    \"\"\"打印所有任务，前面带完成状态符号。\"\"\"\n    # enumerate 同时拿到索引 i 和元素 t\n    for i, t in enumerate(todos):\n        mark = '✓' if t['done'] else '○'  # 三元表达式：已完成打勾\n        print(f'{i} {mark} {t[\"task\"]}')\n\n# 演示用法\nadd('学习 Python 基础')\nadd('完成项目作品')\ncomplete(0)  # 把第 0 条标记为完成\nshow()       # 0 ✓ 学习 Python 基础\\n1 ○ 完成项目作品",
+    },
+    {
+      type: "code",
+      caption: "完整 CLI 版（含增删改查）",
+      body: "todos = []  # 全局状态，实际项目通常放类里\n\ndef add(task: str) -> None:\n    todos.append({'task': task, 'done': False})\n\ndef complete(index: int) -> bool:\n    \"\"\"返回是否成功，便于上层提示用户。\"\"\"\n    if 0 <= index < len(todos):\n        todos[index]['done'] = True\n        return True\n    return False\n\ndef remove(index: int) -> bool:\n    if 0 <= index < len(todos):\n        todos.pop(index)  # pop 默认删末尾，传入 index 删指定位置\n        return True\n    return False\n\ndef show() -> None:\n    if not todos:  # 空列表在布尔上下文是 False\n        print('（暂无任务）')\n        return\n    for i, t in enumerate(todos):\n        mark = '✓' if t['done'] else '○'\n        print(f'{i} {mark} {t[\"task\"]}')\n\ndef main() -> None:\n    \"\"\"CLI 主循环：不断读命令，路由到对应函数。\"\"\"\n    while True:\n        cmd = input('todo> ').strip()  # .strip() 去掉首尾空白与换行\n        if not cmd:                    # 空命令直接跳过\n            continue\n        if cmd == 'q' or cmd == 'quit':\n            break                      # 跳出主循环，程序结束\n        if cmd == 'list' or cmd == 'ls':\n            show()\n        elif cmd.startswith('add '):   # 以 'add ' 开头的命令\n            add(cmd[4:].strip())       # 截掉 'add ' 前缀，剩下的就是任务内容\n        elif cmd.startswith('done '):\n            idx = int(cmd[5:].strip())\n            if not complete(idx):\n                print('索引无效')\n        elif cmd.startswith('rm '):\n            idx = int(cmd[3:].strip())\n            if not remove(idx):\n                print('索引无效')\n        else:\n            print('未知命令，可选: list / add <任务> / done <i> / rm <i> / quit')\n\n# main()  # 在 Pyodide 里 input() 不可用，仅作示例\nshow()\nadd('示例任务 1')\nadd('示例任务 2')\nshow()",
+    },
+    {
+      type: "code",
+      caption: "JSON 持久化版（保存到文件）",
+      body: "import json, os\n\nFILE = 'todos.json'\n\ndef load() -> list:\n    \"\"\"从文件读取 todo 列表，文件不存在或损坏时返回空列表。\"\"\"\n    if not os.path.exists(FILE):     # 第一次运行通常没有这个文件\n        return []\n    try:\n        with open(FILE, 'r', encoding='utf-8') as f:\n            return json.load(f)      # json.load 从文件读 → Python 对象\n    except (json.JSONDecodeError, IOError):\n        # JSON 损坏或读取失败时，不要让程序崩掉\n        return []\n\ndef save(todos: list) -> None:\n    \"\"\"把 todo 列表写回文件，下次启动时 load 能恢复。\"\"\"\n    with open(FILE, 'w', encoding='utf-8') as f:\n        # ensure_ascii=False 让中文不被转成 \\uXXXX\n        json.dump(todos, f, ensure_ascii=False, indent=2)\n\n# 演示：先准备 3 条任务，再保存再读回\ndemo = [\n    {'task': '学习 Python 基础', 'done': True},\n    {'task': '完成 Todo 项目', 'done': False},\n    {'task': '复习面向对象', 'done': False},\n]\nsave(demo)\nrestored = load()\nprint(f'恢复 {len(restored)} 条任务:')\nfor i, t in enumerate(restored):\n    mark = '✓' if t['done'] else '○'\n    print(f'  {i} {mark} {t[\"task\"]}')",
+    },
+    {
+      type: "text",
+      body: "## 关键设计模式\n\n### 1. 列表里装字典（最常见）\n\n```python\ntodos = [\n    {'task': '学习',   'done': False},\n    {'task': '锻炼',   'done': True},\n]\n```\n\n- **列表** 管\"多个\"。\n- **字典** 管\"一个对象的多个属性\"。\n\n更复杂时常用一个 **`Task` 类**（OOP 阶段学）替代字典，可读性更高。\n\n### 2. 防御性编程\n\n所有 `todos[i]` 之前都要检查 `0 <= i < len(todos)`，否则用户输入非法索引会触发 `IndexError`。\n\n### 3. CLI 主循环\n\n```\nwhile True:\n    cmd = input()\n    if cmd == 'q': break\n    ...\n```\n\n这种\"读命令 → 分发 → 回到读\"的模式是几乎所有 CLI 工具的骨架（`git`、`npm`、`pip` 都是）。",
+    },
+    {
+      type: "note",
+      body: "**为什么用 JSON 不用纯文本？**\n\n- 纯文本需要自己写解析器（split、行号、错误处理），复杂且易错。\n- JSON 是**结构化**格式，能直接表示列表/字典/字符串/数字/布尔/None。\n- Python 的 `json` 模块和 `dict`/`list` 一一对应，**双向转换零成本**。\n- 几乎所有语言都支持 JSON，**跨语言通用**。\n\n唯一缺点：JSON 不支持注释、不能存 Python 的 `set`/`tuple`/`datetime` 等特殊类型。",
     },
   ],
   exercises: [
@@ -11629,13 +12236,44 @@ const l24: Lesson = {
   order: 4,
   title: "数据分析入门",
   subtitle: "用 Python 看数据",
-  description: "理解 csv/字典推导/统计函数。",
+  description: "理解 csv/字典推导/统计函数，用 Python 探索真实数据。",
   estimatedMinutes: 15,
   content: [
     {
+      type: "text",
+      body: "## 项目目标\n\n用 Python 对一组学生成绩做**基本统计分析**，关键学习点：\n\n- **列表/字典推导式**：用一行代码完成\"取数 + 过滤 + 转换\"。\n- **内置统计函数**：`sum` / `len` / `max` / `min` / `sorted`。\n- **`statistics` 标准库**：平均、中位数、标准差。\n- **`collections.Counter`**：频次统计神器。\n- **`csv` 模块**：读取真实 CSV 文件。\n- **NumPy / Pandas 入门**：了解更专业的数据分析工具。\n\n数据分析的**核心套路**：**加载 → 清洗 → 转换 → 聚合 → 可视化**。",
+    },
+    {
+      type: "text",
+      body: "## 涉及的知识点\n\n- **列表推导式** `[expr for x in iterable if cond]`：把 `for` 循环压成一行。\n- **字典推导式** `{k: v for ...}`：批量构造字典。\n- **生成器表达式** `(expr for ...)`：惰性求值，省内存。\n- **lambda + key 参数**：自定义排序/最大最小的\"比较规则\"。\n- **`collections.Counter`**：dict 子类，统计可迭代对象的频次。\n- **`csv.reader` / `csv.writer`**：标准库读写 CSV。\n- **`statistics.mean/median/stdev/variance`**：常用统计量。\n- **`pandas.DataFrame`**：表格型数据结构（需要 `pip install pandas`）。",
+    },
+    {
       type: "code",
-      caption: "数据统计",
-      body: "data = [\n    {'name': 'Alice', 'score': 88},\n    {'name': 'Bob',   'score': 92},\n    {'name': 'Cara',  'score': 79},\n]\n\nscores = [d['score'] for d in data]\nprint('平均分:', sum(scores) / len(scores))\nprint('最高分:', max(scores))\nprint('最低分:', min(scores))\nprint('>= 90:', [d['name'] for d in data if d['score'] >= 90])",
+      caption: "最简数据统计",
+      body: "# 模拟一份学生成绩数据：列表里每个元素是一行记录（字典）\ndata = [\n    {'name': 'Alice', 'score': 88},\n    {'name': 'Bob',   'score': 92},\n    {'name': 'Cara',  'score': 79},\n    {'name': 'Dodo',  'score': 95},\n    {'name': 'Elin',  'score': 68},\n]\n\n# 1) 用列表推导式把所有 score 抽出来成一个新列表\nscores = [d['score'] for d in data]\n\n# 2) 内置函数一行搞定统计\nprint('平均分:', sum(scores) / len(scores))   # 84.4\nprint('最高分:', max(scores))                 # 95\nprint('最低分:', min(scores))                 # 68\nprint('排序后:', sorted(scores))              # [68, 79, 88, 92, 95]\n\n# 3) 推导式 + if 过滤：找出 90 分以上的\"学霸\"\ntop = [d['name'] for d in data if d['score'] >= 90]\nprint('>= 90:', top)                          # ['Bob', 'Dodo']",
+    },
+    {
+      type: "code",
+      caption: "字典推导式 + Counter",
+      body: "from collections import Counter\n\ndata = [\n    {'name': 'Alice', 'score': 88},\n    {'name': 'Bob',   'score': 92},\n    {'name': 'Cara',  'score': 79},\n    {'name': 'Dodo',  'score': 95},\n]\n\n# 字典推导式：把列表转成 {name: score} 字典\nby_name = {d['name']: d['score'] for d in data}\nprint(by_name)  # {'Alice': 88, 'Bob': 92, 'Cara': 79, 'Dodo': 95}\n\n# Counter 统计\"分数段\"分布\ndef bucket(s):\n    \"\"\"把分数分成 A(>=90) / B(80-89) / C(<80) 三档。\"\"\"\n    if s >= 90: return 'A'\n    if s >= 80: return 'B'\n    return 'C'\n\n# 列表推导式拿到所有档位，Counter 数频次\nbuckets = Counter(bucket(d['score']) for d in data)\nprint(buckets)               # Counter({'B': 2, 'A': 1, 'C': 1})\nprint('出现最多的档位:', buckets.most_common(1))  # [('B', 2)]",
+    },
+    {
+      type: "code",
+      caption: "用 statistics 计算统计量",
+      body: "import statistics\n\nscores = [88, 92, 79, 95, 68, 88, 76, 91]\n\n# 平均值（算术平均）\nprint('mean :', statistics.mean(scores))    # 84.625\n\n# 中位数（排序后中间那个数）\nprint('median:', statistics.median(scores))  # 88.0\n\n# 样本标准差（数据波动大小）\nprint('stdev :', statistics.stdev(scores))  # 9.43...\n\n# 样本方差\nprint('var   :', statistics.variance(scores))\n\n# 进阶：自定义 key 的 max/min（找出最长的名字）\nnames = ['Alice', 'Bob', 'Christopher', 'Dodo']\nprint('最长名字:', max(names, key=len))    # Christopher",
+    },
+    {
+      type: "code",
+      caption: "用 csv 模块读取真实 CSV",
+      body: "import csv, io\n\n# 实际项目里你会这样：\n# with open('scores.csv', 'r', encoding='utf-8') as f:\n#     reader = csv.DictReader(f)\n#     for row in reader:\n#         ...\n\n# 这里用 io.StringIO 模拟一个 CSV 文件以便在线运行\ncsv_text = '''name,score\nAlice,88\nBob,92\nCara,79\n'''\n\n# DictReader 把每行变成字典：{'name': 'Alice', 'score': '88'}\nreader = csv.DictReader(io.StringIO(csv_text))\n\n# 列表推导式一行读出所有数据\n# 注意：csv 读出的全是字符串，'88' 不是 88，需要 int() 转换\ndata = [{'name': row['name'], 'score': int(row['score'])} for row in reader]\n\nprint(data)\nprint('平均:', sum(d['score'] for d in data) / len(data))",
+    },
+    {
+      type: "text",
+      body: "## 数据分析的标准流程\n\n```\n原始数据 → 加载（read_csv）→ 清洗（处理缺失/重复）→ 转换（filter/map/聚合）\n                                        ↓\n                              可视化（matplotlib）\n                                        ↓\n                                  得出结论\n```\n\n**加载**：CSV / JSON / 数据库 / API → 内存中的表。\n**清洗**：去空值、纠正错误类型、剔除异常值。\n**转换**：分组（groupby）、聚合（agg）、合并（merge）。\n**可视化**：matplotlib（基础）/ seaborn（漂亮）/ plotly（交互）。\n\n### 进阶工具一览\n\n| 库 | 用途 | 核心对象 |\n|----|------|----------|\n| **NumPy** | 数值计算 | `ndarray`（多维数组） |\n| **pandas** | 表格数据分析 | `DataFrame` / `Series` |\n| **matplotlib** | 基础绘图 | `pyplot` |\n| **seaborn** | 统计可视化 | 在 matplotlib 之上 |\n| **scikit-learn** | 机器学习 | `fit/predict` |\n\n本节只用标准库，**保持零依赖**；生产环境强烈推荐 `pandas + matplotlib`。",
+    },
+    {
+      type: "note",
+      body: "**`pandas` 一行顶 10 行**：上面的\"平均分\"在 pandas 里只需一句：\n\n```python\nimport pandas as pd\ndf = pd.DataFrame(data)         # 把列表转成 DataFrame\nprint(df['score'].mean())        # 84.4\nprint(df[df['score'] >= 90])    # 自动筛选\n```\n\n`DataFrame` 自带 `mean / sum / describe / groupby / merge / plot` 等几十个方法。**学完基础后务必上手 pandas**，效率会质变。",
     },
   ],
   exercises: [
@@ -12150,13 +12788,39 @@ const l25: Lesson = {
   order: 5,
   title: "Web 爬虫基础",
   subtitle: "从 HTML 中提取信息",
-  description: "理解 requests/BeautifulSoup 思路。",
+  description: "理解 requests/BeautifulSoup/正则三件套，爬虫的伦理与边界。",
   estimatedMinutes: 13,
   content: [
     {
+      type: "text",
+      body: "## 项目目标\n\n写一个**最小可用爬虫**的思路，关键学习点：\n\n- **HTTP GET 请求**：`requests.get(url)` 拿到网页源码。\n- **解析 HTML**：用 `BeautifulSoup` 按标签/类名/`id` 取数据。\n- **正则表达式** `re`：当结构不规整时灵活提取。\n- **Headers 伪装**：`User-Agent` 让请求看起来像浏览器。\n- **爬虫伦理**：遵守 `robots.txt`、控制频率、不爬敏感数据。",
+    },
+    {
+      type: "text",
+      body: "## 涉及的知识点\n\n- **`requests.get(url)`**：发起 HTTP GET 请求，返回 `Response` 对象。\n- **`response.status_code`**：200 = 成功，4xx = 客户端错，5xx = 服务端错。\n- **`response.text` / `response.content`**：HTML 文本 / 原始字节。\n- **`BeautifulSoup(html, 'html.parser')`**：把 HTML 解析成一棵可遍历的标签树。\n- **`soup.find()` / `soup.find_all()`**：按标签/类名/`id` 查找。\n- **`re.findall(pattern, str)`**：用正则把匹配的子串全部拿出来。\n- **`headers={'User-Agent': '...'}`**：让服务器以为是浏览器访问。\n- **`time.sleep(1)`**：每次请求间隔，避免对目标站点造成压力。",
+    },
+    {
       type: "code",
-      caption: "解析 HTML 片段",
-      body: "html = '<p class=\"title\">PyPath</p><p>学习 Python</p>'\nimport re\n\n# 实际爬虫会用到 requests + BeautifulSoup，\n# 这里用正则演示匹配 <p> 标签中的文字\nfor m in re.findall(r'<p[^>]*>([^<]+)</p>', html):\n    print('匹配:', m)",
+      caption: "正则解析 HTML 片段",
+      body: "html = '<p class=\"title\">PyPath</p><p>学习 Python</p>'\nimport re\n\n# 实际爬虫通常用 requests + BeautifulSoup，\n# 但正则适合\"小片段、模式固定\"的场景\n# r'...' 是 raw 字符串，反斜杠不会被转义\nfor m in re.findall(r'<p[^>]*>([^<]+)</p>', html):\n    # <p[^>]*>  匹配 <p 后到 > 之间的任意属性（class=...）\n    # ([^<]+)   捕获 <p>...</p> 中间不是 < 的文字\n    print('匹配:', m)\n# 输出：匹配: PyPath\\n匹配: 学习 Python",
+    },
+    {
+      type: "code",
+      caption: "BeautifulSoup 解析结构化 HTML",
+      body: "from bs4 import BeautifulSoup  # 需要 pip install beautifulsoup4\n\nhtml = '''\n<html>\n  <body>\n    <h1 id=\"title\">PyPath 学习平台</h1>\n    <ul class=\"lessons\">\n      <li class=\"lesson\">Python 入门</li>\n      <li class=\"lesson\">数据结构</li>\n      <li class=\"lesson\">面向对象</li>\n    </ul>\n  </body>\n</html>\n'''\n\n# 第二个参数指定解析器：'html.parser' 纯标准库，无需额外依赖\nsoup = BeautifulSoup(html, 'html.parser')\n\n# 按 id 取唯一的元素\ntitle = soup.find(id='title').text\nprint('标题:', title)  # PyPath 学习平台\n\n# 按 class 取所有匹配元素\nitems = soup.find_all('li', class_='lesson')\n# 列表推导式把所有 li 的文字拿出来\nlessons = [li.text for li in items]\nprint('课程:', lessons)  # ['Python 入门', '数据结构', '面向对象']",
+    },
+    {
+      type: "code",
+      caption: "requests 发起真实请求",
+      body: "import requests  # 需要 pip install requests\n\n# 1) 加 User-Agent 模拟浏览器，否则可能被反爬\nheaders = {\n    'User-Agent': 'Mozilla/5.0 (PyPath Learner)'\n}\n\n# 2) 发起 GET 请求\n# resp = requests.get('https://example.com', headers=headers, timeout=5)\n\n# 3) 检查状态码\n# if resp.status_code == 200:\n#     html = resp.text             # 拿到 HTML 字符串\n# else:\n#     print('请求失败:', resp.status_code)\n\n# 这里在 Pyodide 中没有外网，用一段静态文本演示 status_code 的判断\nimport urllib.request, urllib.error\n\n# 演示用：本地伪代码\nclass FakeResp:\n    status_code = 200\n    text = '<html>...</html>'\n\nresp = FakeResp()\nif resp.status_code == 200:\n    print('OK, 内容长度:', len(resp.text))\nelse:\n    print('请求失败:', resp.status_code)",
+    },
+    {
+      type: "text",
+      body: "## 完整爬虫模板\n\n```python\nimport requests, time\nfrom bs4 import BeautifulSoup\n\ndef crawl(url):\n    headers = {'User-Agent': 'Mozilla/5.0'}\n    try:\n        resp = requests.get(url, headers=headers, timeout=10)\n        resp.raise_for_status()                  # 状态码非 200 时抛异常\n    except requests.RequestException as e:\n        print('请求出错:', e)\n        return []\n\n    soup = BeautifulSoup(resp.text, 'html.parser')\n    results = [el.text for el in soup.find_all('h2')]  # 假设抓所有 h2\n    return results\n\nfor i, url in enumerate(urls, 1):\n    data = crawl(url)\n    print(f'[{i}/{len(urls)}] {url} -> {len(data)} 条')\n    time.sleep(1)                                # 间隔 1 秒，礼貌爬取\n```\n\n### 进阶：处理登录、分页、动态渲染\n\n| 场景 | 工具 |\n|------|------|\n| 登录态 | `requests.Session()` + 提交表单 / 携带 Cookie |\n| 分页 | URL 模板 `?page={i}`，循环拼 URL |\n| 动态渲染（JS 加载） | `Selenium` / `Playwright` 驱动真实浏览器 |\n| 反爬对抗 | 代理 IP、随机 UA、降速、验证码识别 |\n| 分布式 | `Scrapy` 框架（工业级） |",
+    },
+    {
+      type: "note",
+      body: "**爬虫的\"三重底线\"**\n\n1. **法律**：`robots.txt` 是网站声明\"哪些路径可以爬\"的君子协议，`User-agent: *` 的 `Disallow` 路径应跳过。\n2. **频率**：别一秒几百次狂轰滥炸，**1 秒 1 次**起步，高频请用代理池。\n3. **数据**：不爬**个人信息、版权内容、付费墙**；爬到数据也要**妥善存储、限期删除**。\n\n违反者可能被封 IP、起诉甚至判刑——爬虫写起来简单，**用法决定它是好工具还是犯罪工具**。",
     },
   ],
   exercises: [
